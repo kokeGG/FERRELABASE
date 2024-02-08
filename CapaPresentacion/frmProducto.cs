@@ -53,8 +53,6 @@ namespace CapaPresentacion
             cbobusqueda.ValueMember = "Valor";
             cbobusqueda.SelectedIndex = 0;
 
-
-
             //MOSTRAR TODOS LOS PRODUCTOS
             List<Producto> listaProducto = new CN_Producto().Listar();
 

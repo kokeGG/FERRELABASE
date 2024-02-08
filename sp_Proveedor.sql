@@ -1,4 +1,4 @@
-/*-------------------------------------SPS PARA CLIENTES -------------------------------------*/
+/*-------------------------------------SPS PARA PROVEEDOR -------------------------------------*/
 
 CREATE PROC sp_RegistrarProveedor(
 @Documento VARCHAR(50),
@@ -80,3 +80,67 @@ BEGIN
 END
 
 SELECT * FROM PROVEEDOR;
+
+go
+
+/* PROCESOS PARA REGISTRAR UNA COMPRA */
+
+CREATE TYPE [dbo].[EDetalle_compra] AS TABLE(
+	[IdProducto] int NULL,
+	[PrecioCompra] decimal (18,2) NULL,
+	[PrecioVenta] decimal (18,2) NULL,
+	[Cantidad] int NULL,
+	[MontoTotal] decimal(18,2) NULL
+)
+
+go
+
+
+
+CREATE PROCEDURE sp_RegistrarCompra(
+@IdUsuario int,
+@IdProveedor int,
+@TipoDocumento VARCHAR(500),
+@NumeroDocumento VARCHAR(500),
+@MontoTotal decimal(18,2),
+@DetalleCompra [EDetalle_Compra] READONLY,
+@Resultado bit output,
+@Mensaje VARCHAR(500) OUTPUT
+)
+
+AS
+BEGIN
+	BEGIN TRY
+		DECLARE @idcompra int = 0
+		SET @Resultado = 1
+		SET @Mensaje = ''
+
+		BEGIN TRANSACTION registro
+
+		insert into COMPRA(IdUsuario, IdProveedor, TipoDocumento, NumeroDocumento, MontoTotal)
+		VALUES (@IdUsuario, @IdProveedor, @TipoDocumento, @NumeroDocumento, @MontoTotal)
+
+		SET @idcompra = SCOPE_IDENTITY()
+
+		insert into DETALLE_COMPRA(IdCompra, IdProducto, PrecioCompra, PrecioVenta, Cantidad, MontoTotal)
+		select @idcompra, IdProducto, PrecioCompra, PrecioVenta, Cantidad, MontoTotal from @DetalleCompra
+
+
+		UPDATE p set p.Stock = p.Stock + dc.Cantidad,
+		p.PrecioCompra = dc.PrecioCompra,
+		p.PrecioVenta = dc.PrecioVenta
+		from PRODUCTO p
+		INNER JOIN @DetalleCompra dc ON dc.IdProducto = p.IdProducto
+
+		COMMIT TRANSACTION registro
+
+
+	END TRY
+	BEGIN CATCH
+		set @Resultado = 0
+		set @Mensaje = ERROR_MESSAGE()
+
+		rollback transaction registro
+	END CATCH
+END
+
