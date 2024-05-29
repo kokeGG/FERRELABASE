@@ -54,6 +54,8 @@ namespace CapaPresentacion
                     item.IdCliente,
                     item.Documento,
                     item.NombreCompleto,
+                    item.RazonSocial,
+                    item.RFC,
                     item.Correo,
                     item.Telefono,
                     item.Estado == true ? 1 : 0 ,
@@ -71,6 +73,8 @@ namespace CapaPresentacion
                 IdCliente = Convert.ToInt32(txtid.Text),
                 Documento = txtdocumento.Text,
                 NombreCompleto = txtnombrecompleto.Text,
+                RazonSocial = txtrazonsocial.Text,
+                RFC = txtrfc.Text,
                 Correo = txtcorreo.Text,
                 Telefono = txttelefono.Text,
                 Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false
@@ -83,7 +87,7 @@ namespace CapaPresentacion
                 if (idgenerado != 0)
                 {
 
-                    dgvdata.Rows.Add(new object[] {"",idgenerado,txtdocumento.Text,txtnombrecompleto.Text,txtcorreo.Text,txttelefono.Text,
+                    dgvdata.Rows.Add(new object[] {"",idgenerado,txtdocumento.Text,txtnombrecompleto.Text, txtrazonsocial.Text, txtrfc.Text, txtcorreo.Text,txttelefono.Text,
                         ((OpcionCombo)cboestado.SelectedItem).Valor.ToString(),
                         ((OpcionCombo)cboestado.SelectedItem).Texto.ToString()
                     });
@@ -107,6 +111,8 @@ namespace CapaPresentacion
                     row.Cells["Id"].Value = txtid.Text;
                     row.Cells["Documento"].Value = txtdocumento.Text;
                     row.Cells["NombreCompleto"].Value = txtnombrecompleto.Text;
+                    row.Cells["RazonSocial"].Value = txtrazonsocial.Text;
+                    row.Cells["RFC"].Value = txtrfc.Text;
                     row.Cells["Correo"].Value = txtcorreo.Text;
                     row.Cells["Telefono"].Value = txttelefono.Text;
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboestado.SelectedItem).Valor.ToString();
@@ -126,6 +132,8 @@ namespace CapaPresentacion
             txtid.Text = "0";
             txtdocumento.Text = "";
             txtnombrecompleto.Text = "";
+            txtrazonsocial.Text = "";
+            txtrfc.Text = "";
             txtcorreo.Text = "";
             txttelefono.Text = "";
             cboestado.SelectedIndex = 0;
@@ -166,6 +174,8 @@ namespace CapaPresentacion
                     txtid.Text = dgvdata.Rows[indice].Cells["Id"].Value.ToString();
                     txtdocumento.Text = dgvdata.Rows[indice].Cells["Documento"].Value.ToString();
                     txtnombrecompleto.Text = dgvdata.Rows[indice].Cells["NombreCompleto"].Value.ToString();
+                    txtrazonsocial.Text = dgvdata.Rows[indice].Cells["RazonSocial"].Value.ToString();
+                    txtrfc.Text = dgvdata.Rows[indice].Cells["RFC"].Value.ToString();
                     txtcorreo.Text = dgvdata.Rows[indice].Cells["Correo"].Value.ToString();
                     txttelefono.Text = dgvdata.Rows[indice].Cells["Telefono"].Value.ToString();
 

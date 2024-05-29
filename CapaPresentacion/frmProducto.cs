@@ -64,6 +64,8 @@ namespace CapaPresentacion
                     "",
                     item.IdProducto,
                     item.Codigo,
+                    item.UnidadSat,
+                    item.ClaveSat,
                     item.Nombre,
                     item.Descripcion,
                     item.oCategoria.IdCategoria,
@@ -85,6 +87,8 @@ namespace CapaPresentacion
             {
                 IdProducto = Convert.ToInt32(txtid.Text),
                 Codigo = txtcodigo.Text,
+                UnidadSat = txtunidadSAT.Text,
+                ClaveSat = txtclaveSAT.Text,
                 Nombre = txtnombre.Text,
                 Descripcion = txtdescripcion.Text,
                 oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(((OpcionCombo)cbocategoria.SelectedItem).Valor) },
@@ -102,6 +106,8 @@ namespace CapaPresentacion
                         "",
                         idProductogenerado,
                         txtcodigo.Text,
+                        txtunidadSAT.Text,
+                        txtclaveSAT.Text,
                         txtnombre.Text,
                         txtdescripcion.Text,
                         ((OpcionCombo)cbocategoria.SelectedItem).Valor.ToString(),
@@ -130,6 +136,8 @@ namespace CapaPresentacion
                     DataGridViewRow row = dgvdata.Rows[Convert.ToInt32(txtindice.Text)];
                     row.Cells["Id"].Value = txtid.Text;
                     row.Cells["Codigo"].Value = txtcodigo.Text;
+                    row.Cells["UnidadSat"].Value = txtunidadSAT.Text;
+                    row.Cells["ClaveSat"].Value = txtclaveSAT.Text;
                     row.Cells["Nombre"].Value = txtnombre.Text;
                     row.Cells["Descripcion"].Value = txtdescripcion.Text;
                     row.Cells["IdCategoria"].Value = ((OpcionCombo)cbocategoria.SelectedItem).Valor.ToString();
@@ -152,6 +160,8 @@ namespace CapaPresentacion
             txtindice.Text = "-1";
             txtid.Text = "0";
             txtcodigo.Text = "";
+            txtunidadSAT.Text = "";
+            txtclaveSAT.Text = "";
             txtnombre.Text = "";
             txtdescripcion.Text = "";
             cbocategoria.SelectedIndex = 0;
@@ -194,6 +204,8 @@ namespace CapaPresentacion
                     txtindice.Text = indice.ToString();
                     txtid.Text = dgvdata.Rows[indice].Cells["Id"].Value.ToString();
                     txtcodigo.Text = dgvdata.Rows[indice].Cells["Codigo"].Value.ToString();
+                    txtunidadSAT.Text = dgvdata.Rows[indice].Cells["UnidadSat"].Value.ToString();
+                    txtclaveSAT.Text = dgvdata.Rows[indice].Cells["ClaveSat"].Value.ToString();
                     txtnombre.Text = dgvdata.Rows[indice].Cells["Nombre"].Value.ToString();
                     txtdescripcion.Text = dgvdata.Rows[indice].Cells["Descripcion"].Value.ToString();
                     

@@ -1,6 +1,8 @@
 /*----------------------------SPS PARA Cliente--------------------------------------------*/
 CREATE PROC sp_RegistrarCliente(
 @Documento VARCHAR(50),
+@RazonSocial VARCHAR(50),
+@RFC VARCHAR(50),
 @NombreCompleto VARCHAR(50),
 @Correo VARCHAR(50),
 @Telefono VARCHAR(50),
@@ -13,8 +15,8 @@ BEGIN
 	DECLARE @IDPERSONA INT
 	IF NOT EXISTS (SELECT * FROM CLIENTE WHERE Documento = @Documento)
 	BEGIN
-		INSERT INTO CLIENTE(Documento, NombreCompleto, Correo, Telefono, Estado) VALUES (
-		@Documento, @NombreCompleto, @Correo, @Telefono, @Estado)
+		INSERT INTO CLIENTE(Documento, RazonSocial, RFC, NombreCompleto, Correo, Telefono, Estado) VALUES (
+		@Documento, @RazonSocial, @RFC, @NombreCompleto, @Correo, @Telefono, @Estado)
 
 		SET @Resultado = SCOPE_IDENTITY()
 	END
@@ -26,6 +28,8 @@ GO
 CREATE PROC sp_ModificarCliente(
 @IdCliente INT,
 @Documento VARCHAR(50),
+@RazonSocial VARCHAR(50),
+@RFC VARCHAR(50),
 @NombreCompleto VARCHAR(50),
 @Correo VARCHAR(50),
 @Telefono VARCHAR(50),
@@ -40,6 +44,8 @@ BEGIN
 	BEGIN
 		UPDATE CLIENTE SET
 		Documento = @Documento,
+		RazonSocial = @RazonSocial,
+		RFC = @RFC,
 		NombreCompleto = @NombreCompleto,
 		Correo = @Correo,
 		Telefono = @Telefono,
@@ -94,4 +100,4 @@ END
 
 GO
 
-SELECT IdCliente, Documento, NombreCompleto, Correo, Telefono, Estado FROM CLIENTE
+SELECT IdCliente, Documento, RazonSocial, RFC, NombreCompleto, Correo, Telefono, Estado FROM CLIENTE

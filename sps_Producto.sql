@@ -103,3 +103,69 @@ UPDATE PRODUCTO SET Estado = 1
 UPDATE PRODUCTO SET IdCategoria = 1
 
 SELECT * FROM CATEGORIA
+
+-----ALTER SPS
+
+ALTER TABLE PRODUCTO
+ADD ClaveSat VARCHAR(50),
+	UnidadSat VARCHAR(50);
+
+
+
+ALTER PROCEDURE SP_RegistrarProducto(
+@Codigo VARCHAR(20),
+@Nombre VARCHAR(30),
+@Descripcion VARCHAR(30),
+@IdCategoria INT,
+@Estado BIT,
+@ClaveSat VARCHAR(50),
+@UnidadSat VARCHAR(50),
+@Resultado INT OUTPUT,
+@Mensaje VARCHAR(500) OUTPUT
+)
+AS
+BEGIN
+	SET @Resultado = 0
+	IF NOT EXISTS (SELECT * FROM PRODUCTO WHERE Codigo = @Codigo)
+	BEGIN
+		INSERT INTO PRODUCTO(Codigo, Nombre, Descripcion, IdCategoria, Estado, ClaveSat, UnidadSat)
+		VALUES (@Codigo, @Nombre, @Descripcion, @IdCategoria, @Estado, @ClaveSat, @UnidadSat)
+		SET @Resultado = SCOPE_IDENTITY()
+	END
+	ELSE 
+		SET @Mensaje = 'Ya existe un producto con el mismo código'
+END
+
+
+ALTER PROCEDURE SP_EditarProducto(
+@IdProducto INT,
+@Codigo VARCHAR(20),
+@Nombre VARCHAR(30),
+@Descripcion VARCHAR(30),
+@IdCategoria INT,
+@Estado BIT,
+@ClaveSat VARCHAR(50),
+@UnidadSat VARCHAR(50),
+@Resultado INT OUTPUT,
+@Mensaje VARCHAR(500) OUTPUT
+)
+AS
+BEGIN
+	SET @Resultado = 1
+	IF NOT EXISTS (SELECT * FROM PRODUCTO WHERE Codigo = @Codigo AND IdProducto != @IdProducto)
+
+		UPDATE PRODUCTO SET
+		Codigo = @Codigo,
+		Nombre = @Nombre,
+		Descripcion = @Descripcion,
+		IdCategoria = @IdCategoria,
+		Estado = @Estado,
+		ClaveSat = @ClaveSat,
+		UnidadSat = @UnidadSat
+		WHERE IdProducto = @IdProducto
+	ELSE
+	BEGIN
+		SET @Resultado = 0
+		SET @Mensaje = 'Ya existe el producto con el mismo código'
+	END
+END

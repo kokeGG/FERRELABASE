@@ -3,6 +3,7 @@
 CREATE PROC sp_RegistrarProveedor(
 @Documento VARCHAR(50),
 @RazonSocial VARCHAR(50),
+@RFC VARCHAR(30),
 @Correo VARCHAR(50),
 @Telefono VARCHAR(50),
 @Estado BIT,
@@ -14,8 +15,8 @@ BEGIN
 	DECLARE @IDPERSONA INT
 	IF NOT EXISTS (SELECT * FROM PROVEEDOR WHERE Documento = @Documento)
 	BEGIN
-		INSERT INTO PROVEEDOR(Documento, RazonSocial, Correo, Telefono, Estado) VALUES (
-		@Documento, @RazonSocial, @Correo, @Telefono, @Estado)
+		INSERT INTO PROVEEDOR(Documento, RazonSocial, RFC, Correo, Telefono, Estado) VALUES (
+		@Documento, @RazonSocial, @RFC, @Correo, @Telefono, @Estado)
 
 		SET @Resultado = SCOPE_IDENTITY()
 	END
@@ -25,10 +26,12 @@ END
 
 GO
 
+
 CREATE PROC sp_ModificarProveedor(
 @IdProveedor INT,
 @Documento VARCHAR(50),
 @RazonSocial VARCHAR(50),
+@RFC VARCHAR(30),
 @Correo VARCHAR(50),
 @Telefono VARCHAR(50),
 @Estado BIT,
@@ -43,6 +46,7 @@ BEGIN
 		UPDATE PROVEEDOR SET
 		Documento = @Documento,
 		RazonSocial = @RazonSocial,
+		RFC = @RFC,
 		Correo = @Correo,
 		Telefono = @Telefono,
 		Estado = @Estado

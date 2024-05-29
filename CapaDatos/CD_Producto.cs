@@ -32,7 +32,7 @@ namespace CapaDatos
 
                     //string query = "SELECT IdProducto, Documento, NombreCompleto, Correo, Clave, Estado FROM Producto";
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT p.IdProducto, p.Codigo, p.Nombre, p.Descripcion, c.IdCategoria, c.Descripcion[DescripcionCategoria], p.Stock, p.PrecioCompra, p.PrecioVenta, p.Estado FROM PRODUCTO p");
+                    query.AppendLine("SELECT p.IdProducto, p.UnidadSat, p.ClaveSat, p.Codigo, p.Nombre, p.Descripcion, c.IdCategoria, c.Descripcion[DescripcionCategoria], p.Stock, p.PrecioCompra, p.PrecioVenta, p.Estado FROM PRODUCTO p");
                     query.AppendLine("INNER JOIN CATEGORIA c ON c.IdCategoria = p.IdCategoria");
 
                     using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
@@ -46,6 +46,8 @@ namespace CapaDatos
                                 lista.Add(new Producto()
                                 {
                                     IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    UnidadSat = dr["UnidadSat"].ToString(),
+                                    ClaveSat = dr["ClaveSat"].ToString(),
                                     Codigo = dr["Codigo"].ToString(),
                                     Nombre = dr["Nombre"].ToString(),
                                     Descripcion = dr["Descripcion"].ToString(),
@@ -79,6 +81,8 @@ namespace CapaDatos
                 {
                     SqlCommand cmd = new SqlCommand("SP_RegistrarProducto", oconexion);
                     cmd.Parameters.AddWithValue("Codigo", obj.Codigo);
+                    cmd.Parameters.AddWithValue("UnidadSat", obj.UnidadSat);
+                    cmd.Parameters.AddWithValue("ClaveSat", obj.ClaveSat);
                     cmd.Parameters.AddWithValue("Nombre", obj.Nombre);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("IdCategoria", obj.oCategoria.IdCategoria);
@@ -116,6 +120,8 @@ namespace CapaDatos
                 {
                     SqlCommand cmd = new SqlCommand("SP_EditarProducto", oconexion);
                     cmd.Parameters.AddWithValue("IdProducto", obj.IdProducto);
+                    cmd.Parameters.AddWithValue("UnidadSat", obj.UnidadSat);
+                    cmd.Parameters.AddWithValue("ClaveSat", obj.ClaveSat);
                     cmd.Parameters.AddWithValue("Codigo", obj.Codigo);
                     cmd.Parameters.AddWithValue("Nombre", obj.Nombre);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);

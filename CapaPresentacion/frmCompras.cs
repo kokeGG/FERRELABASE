@@ -57,6 +57,26 @@ namespace CapaPresentacion
             }
         }
 
+        private void txtrfcproveedor_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                Proveedor oProveedor = new CN_Proveedor().Listar().Where(p => p.RFC == txtnumerodocumento.Text).FirstOrDefault();
+
+                if (oProveedor != null)
+                {
+                    txtnumerodocumento.BackColor = Color.Honeydew;
+                    txtidproveedor.Text = oProveedor.IdProveedor.ToString();
+                    txtrazonsocial.Text = oProveedor.RazonSocial.ToString();
+                } else
+                {
+                    txtnumerodocumento.BackColor = Color.MistyRose;
+                    txtidproveedor.Text = "0";
+                    txtrazonsocial.Text = "" ;
+                }
+            }
+        }
+
         private void btnbuscarproducto_Click(object sender, EventArgs e)
         {
             using (var modal = new mdProducto())
@@ -271,30 +291,58 @@ namespace CapaPresentacion
 
             DataTable detalle_compra = new DataTable();
 
-            detalle_compra.Columns.Add("IdProducto", typeof(string));
+            detalle_compra.Columns.Add("IdProducto", typeof(int));
             detalle_compra.Columns.Add("PrecioCompra", typeof(decimal));
             detalle_compra.Columns.Add("PrecioVenta", typeof(decimal));
             detalle_compra.Columns.Add("Cantidad", typeof(int));
             detalle_compra.Columns.Add("MontoTotal", typeof(decimal));
 
-            foreach (DataGridViewRow row in dgvdata.Rows) {
+            foreach (DataGridViewRow row in dgvdata.Rows)
+            {
                 detalle_compra.Rows.Add(
-                    new object[]
-                    {
-                        Convert.ToInt32(row.Cells["IdProducto"].Value.ToString()),
-                        row.Cells["PrecioCompra"].Value.ToString(),
-                        row.Cells["PrecioVenta"].Value.ToString(),
-                        row.Cells["Cantidad"].Value.ToString(),
-                        row.Cells["SubTotal"].Value.ToString()
-                    }
-                );
+                    new object[] {
+                       Convert.ToInt32(row.Cells["IdProducto"].Value.ToString()),
+                       row.Cells["PrecioCompra"].Value.ToString(),
+                       row.Cells["PrecioVenta"].Value.ToString(),
+                       row.Cells["Cantidad"].Value.ToString(),
+                       row.Cells["SubTotal"].Value.ToString()
+                    });
+
             }
+
             int idcorrelativo = new CN_Compra().ObtenerCorrelativo();
             string numerodocumento = string.Format("{0:00000}", idcorrelativo);
+
             Compra oCompra = new Compra()
             {
-                oUsuario = new Usuario() { IdUsuario = _Usuario.IdUsuario }
+                oUsuario = new Usuario() { IdUsuario = _Usuario.IdUsuario },
+                oProveedor = new Proveedor() { IdProveedor = Convert.ToInt32(txtidproveedor.Text) },
+                TipoDocumento = ((OpcionCombo)cbotipodocumento.SelectedItem).Texto,
+                NumeroDocumeto = numerodocumento,
+                MontoTotal = Convert.ToDecimal(txttotalpagar.Text)
             };
+
+            string mensaje = string.Empty;
+            bool respuesta = new CN_Compra().Registrar(oCompra, detalle_compra, out mensaje);
+
+            if (respuesta)
+            {
+                var result = MessageBox.Show("Numero de compra generada:\n" + numerodocumento + "\n\n¿Desea copiar al portapapeles?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+
+                if (result == DialogResult.Yes)
+                    Clipboard.SetText(numerodocumento);
+
+                txtidproveedor.Text = "0";
+                txtnumerodocumento.Text = "";
+                txtrazonsocial.Text = "";
+                dgvdata.Rows.Clear();
+                calcularTotal();
+
+            }
+            else
+            {
+                MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
         }
     }
 }

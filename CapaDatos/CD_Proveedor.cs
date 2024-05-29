@@ -32,7 +32,7 @@ namespace CapaDatos
 
                     //string query = "SELECT IdProveedor, Documento, NombreCompleto, Correo, Clave, Estado FROM Proveedor";
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT IdProveedor, Documento, RazonSocial, Correo, Telefono, Estado FROM PROVEEDOR");
+                    query.AppendLine("SELECT IdProveedor, Documento, RazonSocial, RFC, Correo, Telefono, Estado FROM PROVEEDOR");
 
                     using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
                     {
@@ -47,6 +47,7 @@ namespace CapaDatos
                                     IdProveedor = Convert.ToInt32(dr["IdProveedor"]),
                                     Documento = dr["Documento"].ToString(),
                                     RazonSocial = dr["RazonSocial"].ToString(),
+                                    RFC = dr["RFC"].ToString(),
                                     Correo = dr["Correo"].ToString(),
                                     Telefono = dr["Telefono"].ToString(),
                                     Estado = Convert.ToBoolean(dr["Estado"]),
@@ -76,6 +77,7 @@ namespace CapaDatos
                     SqlCommand cmd = new SqlCommand("SP_RegistrarProveedor", oconexion);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("RazonSocial", obj.RazonSocial);
+                    cmd.Parameters.AddWithValue("RFC", obj.RFC);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
@@ -114,6 +116,7 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("IdProveedor", obj.IdProveedor);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("RazonSocial", obj.RazonSocial);
+                    cmd.Parameters.AddWithValue("RFC", obj.RFC);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);

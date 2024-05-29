@@ -43,7 +43,8 @@ namespace CapaPresentacion.Modales
                 {
                     item.IdProveedor,
                     item.Documento,
-                    item.RazonSocial
+                    item.RazonSocial,
+                    item.RFC
                 });
             }
         }
@@ -59,7 +60,8 @@ namespace CapaPresentacion.Modales
                 {
                     IdProveedor = Convert.ToInt32(dgvdata.Rows[iRow].Cells["Id"].Value.ToString()),
                     Documento = dgvdata.Rows[iRow].Cells["Documento"].Value.ToString(),
-                    RazonSocial = dgvdata.Rows[iRow].Cells["RazonSocial"].Value.ToString()
+                    RazonSocial = dgvdata.Rows[iRow].Cells["RazonSocial"].Value.ToString(),
+                    RFC = dgvdata.Rows[iRow].Cells["RFC"].Value.ToString()
                 };
 
                 this.DialogResult = DialogResult.OK;

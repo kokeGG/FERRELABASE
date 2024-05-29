@@ -252,7 +252,38 @@ namespace CapaPresentacion
             }
         }
 
-        private void btnbuscar_Click(object sender, EventArgs e)
+        //private void btnbuscar_Click(object sender, EventArgs e)
+        //{
+        //    string columnaFiltro = ((OpcionCombo)cbobusqueda.SelectedItem).Valor.ToString();
+
+        //    if (dgvdata.Rows.Count > 0)
+        //    {
+        //        foreach (DataGridViewRow row in dgvdata.Rows)
+        //        {
+
+        //            if (row.Cells[columnaFiltro].Value.ToString().Trim().ToUpper().Contains(txtbusqueda.Text.Trim().ToUpper()))
+        //                row.Visible = true;
+        //            else
+        //                row.Visible = false;
+        //        }
+        //    }
+        //}
+
+        //private void clean_Click(object sender, EventArgs e)
+        //{
+        //    txtbusqueda.Text = "";
+        //    foreach (DataGridViewRow row in dgvdata.Rows)
+        //    {
+        //        row.Visible = true;
+        //    }
+        //}
+
+        private void btnlimpiar_Click(object sender, EventArgs e)
+        {
+            Limpiar();
+        }
+
+        private void btnbuscar_Click_1(object sender, EventArgs e)
         {
             string columnaFiltro = ((OpcionCombo)cbobusqueda.SelectedItem).Valor.ToString();
 
@@ -269,18 +300,14 @@ namespace CapaPresentacion
             }
         }
 
-        private void clean_Click(object sender, EventArgs e)
+        private void clean_Click_1(object sender, EventArgs e)
         {
             txtbusqueda.Text = "";
             foreach (DataGridViewRow row in dgvdata.Rows)
             {
                 row.Visible = true;
             }
-        }
 
-        private void btnlimpiar_Click(object sender, EventArgs e)
-        {
-            Limpiar();
         }
     }
 }

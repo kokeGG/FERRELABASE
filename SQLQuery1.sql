@@ -20,11 +20,18 @@ CREATE TABLE PROVEEDOR(
 	IdProveedor INT PRIMARY KEY IDENTITY(1,1),
 	Documento VARCHAR(50),
 	RazonSocial VARCHAR(50),
+	RFC VARCHAR(30),
 	Correo VARCHAR(50),
 	Telefono VARCHAR(50),
 	Estado bit,
 	FechaRegistro DATETIME DEFAULT GETDATE()
 );
+
+ALTER TABLE PROVEEDOR
+ADD RFC VARCHAR(30) NULL;
+
+SELECT * FROM PROVEEDOR;
+
 --añadir campo de razón social
 CREATE TABLE CLIENTE(
 	IdCliente INT PRIMARY KEY IDENTITY(1,1),
@@ -104,9 +111,34 @@ CREATE TABLE VENTA(
 	FechaRegistro DATETIME DEFAULT GETDATE()
 );
 
+CREATE TABLE COTIZACION(
+	IdCotizacion INT PRIMARY KEY IDENTITY(1,1),
+	IdUsuario INT REFERENCES USUARIO(IdUsuario),
+	TipoDocumento VARCHAR(50),
+	NumeroDocumento VARCHAR(50),
+	DocumentoCliente VARCHAR(50),
+	NombreCliente VARCHAR(100),
+	MontoPago DECIMAL(10,2),
+	MontoCambio DECIMAL(10,2),
+	MontoTotal DECIMAL(10,2),
+	FechaRegistro DATETIME DEFAULT GETDATE()
+);
+
 CREATE TABLE DETALLE_VENTA(
 	IdDetalleVenta INT PRIMARY KEY IDENTITY(1,1),
 	IdVenta INT REFERENCES COMPRA(IdCompra),
+	IdProducto INT REFERENCES PRODUCTO(IdProducto),
+	PrecioVenta DECIMAL(10,2) DEFAULT 0,
+	Cantidad INT,
+	SubTotal DECIMAL(10,2),
+	FechaRegistro DATETIME DEFAULT GETDATE()
+);
+
+DROP TABLE DETALLE_COTIZACION;
+
+CREATE TABLE DETALLE_COTIZACION(
+	IdDetalleCotizacion INT PRIMARY KEY IDENTITY(1,1),
+	IdCotizacion INT REFERENCES COTIZACION(IdCotizacion),
 	IdProducto INT REFERENCES PRODUCTO(IdProducto),
 	PrecioVenta DECIMAL(10,2) DEFAULT 0,
 	Cantidad INT,
@@ -133,7 +165,7 @@ INSERT INTO ROL(Descripcion) VALUES ('ADMINISTRADOR');
 
 select * from permiso;
 SELECT * FROM ROL;
-
+	
 INSERT INTO ROL (Descripcion) VALUES ('EMPLEADO');
 
 INSERT INTO PERMISO(IdRol, NombreMenu) VALUES
@@ -199,7 +231,7 @@ EXEC SP_REGISTRARUSUARIO '123', 'pruebas', 'test@gmail.com', '456', 2, 1, @IdUsu
 
 SELECT @IdUsuarioGenerado
 SELECT @Mensaje
-
+SELECT * FROM USUARIO;
 /*-------------------------------------------------------------------------------*/
 CREATE PROC SP_EDITARUSUARIO(
 @IdUsuario int,

@@ -49,7 +49,9 @@ namespace CapaPresentacion.Modales
                     item.oCategoria.Descripcion,
                     item.Stock,
                     item.PrecioCompra,
-                    item.PrecioVenta
+                    item.PrecioVenta,
+                    item.UnidadSat,
+                    item.ClaveSat
                 });
             }
 
@@ -69,6 +71,8 @@ namespace CapaPresentacion.Modales
                     Stock = Convert.ToInt32(dgvdata.Rows[iRow].Cells["Stock"].Value.ToString()),
                     PrecioCompra = Convert.ToDecimal(dgvdata.Rows[iRow].Cells["PrecioCompra"].Value.ToString()),
                     PrecioVenta = Convert.ToDecimal(dgvdata.Rows[iRow].Cells["PrecioVenta"].Value.ToString()),
+                    UnidadSat = dgvdata.Rows[iRow].Cells["UnidadSat"].Value.ToString(),
+                    ClaveSat = dgvdata.Rows[iRow].Cells["ClaveSat"].Value.ToString()
                 };
                 this.DialogResult = DialogResult.OK;
                 this.Close();

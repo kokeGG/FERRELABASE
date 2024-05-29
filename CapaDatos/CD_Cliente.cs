@@ -32,7 +32,7 @@ namespace CapaDatos
 
                     //string query = "SELECT IdCliente, Documento, NombreCompleto, Correo, Clave, Estado FROM Cliente";
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT IdCliente, Documento, NombreCompleto, Correo, Telefono, Estado FROM CLIENTE");
+                    query.AppendLine("SELECT IdCliente, Documento, NombreCompleto, RazonSocial, RFC, Correo, Telefono, Estado FROM CLIENTE");
                     
                     using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
                     {
@@ -47,6 +47,8 @@ namespace CapaDatos
                                     IdCliente = Convert.ToInt32(dr["IdCliente"]),
                                     Documento = dr["Documento"].ToString(),
                                     NombreCompleto = dr["NombreCompleto"].ToString(),
+                                    RazonSocial = dr["RazonSocial"].ToString(),
+                                    RFC = dr["RFC"].ToString(),
                                     Correo = dr["Correo"].ToString(),
                                     Telefono = dr["Telefono"].ToString(),
                                     Estado = Convert.ToBoolean(dr["Estado"]),
@@ -75,6 +77,8 @@ namespace CapaDatos
                     SqlCommand cmd = new SqlCommand("sp_RegistrarCliente", oconexion);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
+                    cmd.Parameters.AddWithValue("RazonSocial", obj.RazonSocial);
+                    cmd.Parameters.AddWithValue("RFC", obj.RFC);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
@@ -113,6 +117,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("IdCliente", obj.IdCliente);
                     cmd.Parameters.AddWithValue("Documento", obj.Documento);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
+                    cmd.Parameters.AddWithValue("RazonSocial", obj.RazonSocial);
+                    cmd.Parameters.AddWithValue("RFC", obj.RFC);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
