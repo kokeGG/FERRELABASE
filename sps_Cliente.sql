@@ -1,4 +1,6 @@
 /*----------------------------SPS PARA Cliente--------------------------------------------*/
+DROP PROCEDURE sp_RegistrarCliente;
+
 CREATE PROC sp_RegistrarCliente(
 @Documento VARCHAR(50),
 @RazonSocial VARCHAR(50),
@@ -7,6 +9,12 @@ CREATE PROC sp_RegistrarCliente(
 @Correo VARCHAR(50),
 @Telefono VARCHAR(50),
 @Estado BIT,
+@CP VARCHAR(10),
+@DIRECCION VARCHAR(100),
+@Colonia VARCHAR(100),
+@Numero VARCHAR(10),
+@Ciudad VARCHAR(100),
+@Edo VARCHAR(100),
 @Resultado INT OUTPUT,
 @Mensaje VARCHAR(500) OUTPUT
 )AS
@@ -15,8 +23,8 @@ BEGIN
 	DECLARE @IDPERSONA INT
 	IF NOT EXISTS (SELECT * FROM CLIENTE WHERE Documento = @Documento)
 	BEGIN
-		INSERT INTO CLIENTE(Documento, RazonSocial, RFC, NombreCompleto, Correo, Telefono, Estado) VALUES (
-		@Documento, @RazonSocial, @RFC, @NombreCompleto, @Correo, @Telefono, @Estado)
+		INSERT INTO CLIENTE(Documento, RazonSocial, RFC, NombreCompleto, Correo, Telefono, Estado, CP, DIRECCION, Colonia, Numero, Ciudad, Edo) VALUES (
+		@Documento, @RazonSocial, @RFC, @NombreCompleto, @Correo, @Telefono, @Estado, @CP, @DIRECCION, @Colonia, @Numero, @Ciudad, @Edo)
 
 		SET @Resultado = SCOPE_IDENTITY()
 	END
@@ -25,6 +33,9 @@ BEGIN
 END
 
 GO
+
+DROP PROCEDURE sp_ModificarCliente;
+
 CREATE PROC sp_ModificarCliente(
 @IdCliente INT,
 @Documento VARCHAR(50),
@@ -34,6 +45,12 @@ CREATE PROC sp_ModificarCliente(
 @Correo VARCHAR(50),
 @Telefono VARCHAR(50),
 @Estado BIT,
+@CP VARCHAR(10),
+@DIRECCION VARCHAR(100),
+@Colonia VARCHAR(100),
+@Numero VARCHAR(10),
+@Ciudad VARCHAR(100),
+@Edo VARCHAR(100),
 @Resultado BIT OUTPUT,
 @Mensaje VARCHAR(500) OUTPUT
 )AS
@@ -49,7 +66,13 @@ BEGIN
 		NombreCompleto = @NombreCompleto,
 		Correo = @Correo,
 		Telefono = @Telefono,
-		Estado = @Estado
+		Estado = @Estado,
+		CP = @CP,
+		DIRECCION = @DIRECCION,
+		Colonia = @Colonia,
+		Numero = @Numero,
+		Ciudad = @Ciudad,
+		Edo = @Edo
 		WHERE IdCliente = @IdCliente
 	END
 	ELSE

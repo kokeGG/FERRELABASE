@@ -152,6 +152,7 @@
             this.clean.Text = "Limpiar";
             this.clean.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.clean.UseVisualStyleBackColor = false;
+            this.clean.Click += new System.EventHandler(this.clean_Click);
             // 
             // label3
             // 
@@ -186,6 +187,7 @@
             this.btnbuscar.Text = "Buscar";
             this.btnbuscar.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.btnbuscar.UseVisualStyleBackColor = false;
+            this.btnbuscar.Click += new System.EventHandler(this.btnbuscar_Click);
             // 
             // txtbusqueda
             // 
@@ -471,12 +473,12 @@
             this.tableLayoutPanel8.Controls.Add(this.label11, 5, 0);
             this.tableLayoutPanel8.Controls.Add(this.label10, 3, 0);
             this.tableLayoutPanel8.Controls.Add(this.txtmontopago, 4, 0);
-            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 611);
+            this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 608);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
             this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.tableLayoutPanel8.Size = new System.Drawing.Size(1324, 82);
+            this.tableLayoutPanel8.Size = new System.Drawing.Size(1324, 85);
             this.tableLayoutPanel8.TabIndex = 46;
             // 
             // btndescargar
@@ -492,6 +494,7 @@
             this.btndescargar.TabIndex = 39;
             this.btndescargar.Text = "Descargar PDF";
             this.btndescargar.UseVisualStyleBackColor = true;
+            this.btndescargar.Click += new System.EventHandler(this.btndescargar_Click);
             // 
             // label7
             // 

@@ -59,6 +59,26 @@ namespace CapaPresentacion
 
             }
 
+            //cbocfdi.Items.Clear();
+
+            foreach (c_UsoCFDI cfdi in Enum.GetValues(typeof(c_UsoCFDI)))
+            {
+                string nombrecfdi = ObtenerNombreCFDI(cfdi);
+
+                if (!string.IsNullOrWhiteSpace(nombrecfdi))
+                {
+                    cbocfdi.Items.Add(new OpcionCombo() { Valor = cfdi, Texto = nombrecfdi });
+                    cbocfdi.DisplayMember = "Texto";
+                    cbocfdi.ValueMember = "Valor";
+                    cbocfdi.SelectedIndex = 0;
+                }
+
+                //cbocfdi.Items.Add(new OpcionCombo() { Valor = cfdi, Texto = nombrecfdi });
+                //cbocfdi.DisplayMember = "Texto";
+                //cbocfdi.ValueMember = "Valor";
+                //cbocfdi.SelectedIndex = 0;
+            }
+
 
             txtfecha.Text = DateTime.Now.ToString("dd/MM/yyyy");
             txtidproducto.Text = "0";
@@ -120,6 +140,23 @@ namespace CapaPresentacion
             }
         }
 
+        private string ObtenerNombreCFDI(c_UsoCFDI cfdi)
+        {
+            switch (cfdi)
+            {
+                case c_UsoCFDI.G01:
+                    return "Adquisición de mercancias";
+                case c_UsoCFDI.G03:
+                    return "Gastos en general";
+                case c_UsoCFDI.I01:
+                    return "Construcciones";
+                case c_UsoCFDI.S01:
+                    return "Sin efectos fiscales";
+                default:
+                    return "";
+            }
+        }
+
         private void btnbuscarcliente_Click(object sender, EventArgs e)
         {
             using (var modal = new mdCliente())
@@ -129,6 +166,7 @@ namespace CapaPresentacion
                 if (result == DialogResult.OK)
                 {
                     txtdocumentocliente.Text = modal._Cliente.RFC;
+                    txtdoccliente.Text = modal._Cliente.Documento;
                     txtnombrecliente.Text = modal._Cliente.NombreCompleto;
                     txtcodigoproducto.Select();
                 }
@@ -859,7 +897,8 @@ namespace CapaPresentacion
                 oUsuario = new Usuario() { IdUsuario = _Usuario.IdUsuario },
                 TipoDocumento = ((OpcionCombo)cbotipodocumento.SelectedItem).Texto,
                 NumeroDocumento = numeroDocumento,
-                DocumentoCliente = txtdocumentocliente.Text,
+                DocumentoCliente = txtdoccliente.Text,
+                RFC = txtdocumentocliente.Text,
                 NombreCliente = txtnombrecliente.Text,
                 MontoPago = Convert.ToDecimal(txtpagocon.Text),
                 MontoCambio = Convert.ToDecimal(txtcambio.Text),

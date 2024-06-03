@@ -50,6 +50,7 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
                     cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
                     cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
+                    cmd.Parameters.AddWithValue("RFC", obj.RFC);
                     cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
                     cmd.Parameters.AddWithValue("NombreCliente", obj.NombreCliente);
                     cmd.Parameters.AddWithValue("MontoPago", obj.MontoPago);
@@ -90,7 +91,7 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
 
                     query.AppendLine("select c.IdCotizacion,u.NombreCompleto,");
-                    query.AppendLine("c.DocumentoCliente,c.NombreCliente,");
+                    query.AppendLine("c.DocumentoCliente, c.RFC, c.NombreCliente,");
                     query.AppendLine("c.TipoDocumento,c.NumeroDocumento,");
                     query.AppendLine("c.MontoPago,c.MontoCambio,c.MontoTotal,");
                     query.AppendLine("convert(char(10),c.FechaRegistro,103)[FechaRegistro]");
@@ -112,6 +113,7 @@ namespace CapaDatos
                                 IdCotizacion = int.Parse(dr["IdCotizacion"].ToString()),
                                 oUsuario = new Usuario() { NombreCompleto = dr["NombreCompleto"].ToString() },
                                 DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                RFC = dr["RFC"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
                                 TipoDocumento = dr["TipoDocumento"].ToString(),
                                 NumeroDocumento = dr["NumeroDocumento"].ToString(),
@@ -147,7 +149,7 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
                     query.AppendLine("select p.Nombre,dc.PrecioVenta,dc.Cantidad,dc.SubTotal from DETALLE_COTIZACION dc");
                     query.AppendLine("inner join PRODUCTO p on p.IdProducto = dc.IdProducto");
-                    query.AppendLine(" where dc.IdVenta = @idventa");
+                    query.AppendLine(" where dc.IdCotizacion = @idcotizacion");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@idcotizacion", idCotizacion);

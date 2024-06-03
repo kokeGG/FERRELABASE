@@ -59,7 +59,13 @@ namespace CapaPresentacion
                     item.Correo,
                     item.Telefono,
                     item.Estado == true ? 1 : 0 ,
-                    item.Estado == true ? "Activo" : "No Activo"
+                    item.Estado == true ? "Activo" : "No Activo",
+                    item.CP,
+                    item.Direccion,
+                    item.Colonia,
+                    item.Numero,
+                    item.Ciudad,
+                    item.Edo
                 });
             }
         }
@@ -77,7 +83,13 @@ namespace CapaPresentacion
                 RFC = txtrfc.Text,
                 Correo = txtcorreo.Text,
                 Telefono = txttelefono.Text,
-                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false
+                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false,
+                Edo = txtestado.Text,
+                CP = txtcp.Text,
+                Direccion = txtdireccion.Text,
+                Colonia = txtcolonia.Text,
+                Numero = txtnumero.Text,
+                Ciudad = txtciudad.Text,
             };
 
             if (objcliente.IdCliente == 0)
@@ -89,7 +101,13 @@ namespace CapaPresentacion
 
                     dgvdata.Rows.Add(new object[] {"",idgenerado,txtdocumento.Text,txtnombrecompleto.Text, txtrazonsocial.Text, txtrfc.Text, txtcorreo.Text,txttelefono.Text,
                         ((OpcionCombo)cboestado.SelectedItem).Valor.ToString(),
-                        ((OpcionCombo)cboestado.SelectedItem).Texto.ToString()
+                        ((OpcionCombo)cboestado.SelectedItem).Texto.ToString(),
+                        txtcp.Text,
+                        txtdireccion.Text,
+                        txtcolonia.Text,
+                        txtnumero.Text,
+                        txtciudad.Text,
+                        txtestado.Text,
                     });
 
                     Limpiar();
@@ -117,7 +135,12 @@ namespace CapaPresentacion
                     row.Cells["Telefono"].Value = txttelefono.Text;
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboestado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboestado.SelectedItem).Texto.ToString();
-
+                    row.Cells["CP"].Value = txtcp.Text;
+                    row.Cells["DIRECCION"].Value = txtdireccion.Text;
+                    row.Cells["Colonia"].Value = txtcolonia.Text;
+                    row.Cells["Numero"].Value = txtnumero.Text;
+                    row.Cells["Ciudad"].Value = txtciudad.Text;
+                    row.Cells["Edo"].Value = txtestado.Text;
                     Limpiar();
                 }
                 else
@@ -138,6 +161,12 @@ namespace CapaPresentacion
             txttelefono.Text = "";
             cboestado.SelectedIndex = 0;
             txtdocumento.Select();
+            txtcp.Text = "";
+            txtdireccion.Text = "";
+            txtestado.Text = "";
+            txtcolonia.Text = "";
+            txtciudad.Text = "";
+            txtnumero.Text = "";
         }
 
         private void dgvdata_CellPainting(object sender, DataGridViewCellPaintingEventArgs e)
@@ -178,6 +207,12 @@ namespace CapaPresentacion
                     txtrfc.Text = dgvdata.Rows[indice].Cells["RFC"].Value.ToString();
                     txtcorreo.Text = dgvdata.Rows[indice].Cells["Correo"].Value.ToString();
                     txttelefono.Text = dgvdata.Rows[indice].Cells["Telefono"].Value.ToString();
+                    txtcp.Text = dgvdata.Rows[indice].Cells["CP"].Value.ToString();
+                    txtdireccion.Text = dgvdata.Rows[indice].Cells["DIRECCION"].Value.ToString();
+                    txtcolonia.Text = dgvdata.Rows[indice].Cells["Colonia"].Value.ToString();
+                    txtnumero.Text = dgvdata.Rows[indice].Cells["Numero"].Value.ToString();
+                    txtciudad.Text = dgvdata.Rows[indice].Cells["Ciudad"].Value.ToString();
+                    txtestado.Text = dgvdata.Rows[indice].Cells["Edo"].Value.ToString();
 
                     foreach (OpcionCombo oc in cboestado.Items)
                     {

@@ -32,7 +32,7 @@ namespace CapaDatos
 
                     //string query = "SELECT IdCliente, Documento, NombreCompleto, Correo, Clave, Estado FROM Cliente";
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT IdCliente, Documento, NombreCompleto, RazonSocial, RFC, Correo, Telefono, Estado FROM CLIENTE");
+                    query.AppendLine("SELECT IdCliente, Documento, NombreCompleto, RazonSocial, RFC, Correo, Telefono, Estado, CP, DIRECCION, Colonia, Numero, Ciudad, Edo FROM CLIENTE");
                     
                     using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
                     {
@@ -52,6 +52,12 @@ namespace CapaDatos
                                     Correo = dr["Correo"].ToString(),
                                     Telefono = dr["Telefono"].ToString(),
                                     Estado = Convert.ToBoolean(dr["Estado"]),
+                                    CP = dr["CP"].ToString(),
+                                    Direccion = dr["Direccion"].ToString(),
+                                    Colonia = dr["Colonia"].ToString(),
+                                    Numero = dr["Numero"].ToString(),
+                                    Ciudad = dr["Ciudad"].ToString(),
+                                    Edo = dr["Edo"].ToString()
                                 });
                             }
                         }
@@ -82,6 +88,12 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
+                    cmd.Parameters.AddWithValue("CP", obj.CP);
+                    cmd.Parameters.AddWithValue("DIRECCION", obj.Direccion);
+                    cmd.Parameters.AddWithValue("Colonia", obj.Colonia);
+                    cmd.Parameters.AddWithValue("Numero", obj.Numero);
+                    cmd.Parameters.AddWithValue("Ciudad", obj.Ciudad);
+                    cmd.Parameters.AddWithValue("Edo", obj.Edo);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -122,6 +134,12 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Telefono", obj.Telefono);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
+                    cmd.Parameters.AddWithValue("CP", obj.CP);
+                    cmd.Parameters.AddWithValue("DIRECCION", obj.Direccion);
+                    cmd.Parameters.AddWithValue("Colonia", obj.Colonia);
+                    cmd.Parameters.AddWithValue("Numero", obj.Numero);
+                    cmd.Parameters.AddWithValue("Ciudad", obj.Ciudad);
+                    cmd.Parameters.AddWithValue("Edo", obj.Edo);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
                     cmd.CommandType = CommandType.StoredProcedure;

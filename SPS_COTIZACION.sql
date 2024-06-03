@@ -11,6 +11,7 @@ CREATE PROCEDURE usp_RegistrarCotizacion(
 @IdUsuario INT,
 @TipoDocumento VARCHAR(500),
 @NumeroDocumento VARCHAR(500),
+@RFC VARCHAR(500),
 @DocumentoCliente VARCHAR(500),
 @NombreCliente VARCHAR(500),
 @MontoPago DECIMAL(18,2),
@@ -29,8 +30,8 @@ BEGIN
 
 		BEGIN TRANSACTION registro
 
-		INSERT INTO VENTA(IdUsuario, TipoDocumento, NumeroDocumento, DocumentoCliente, NombreCliente, MontoPago, MontoCambio, MontoTotal)
-		VALUES (@IdUsuario, @TipoDocumento, @NumeroDocumento, @DocumentoCliente, @NombreCliente, @MontoPago, @MontoCambio, @MontoTotal)
+		INSERT INTO COTIZACION(IdUsuario, TipoDocumento, NumeroDocumento, RFC, DocumentoCliente, NombreCliente, MontoPago, MontoCambio, MontoTotal)
+		VALUES (@IdUsuario, @TipoDocumento, @NumeroDocumento, @DocumentoCliente, @RFC, @NombreCliente, @MontoPago, @MontoCambio, @MontoTotal)
 
 		SET @idcotizacion = SCOPE_IDENTITY()
 
@@ -47,3 +48,5 @@ BEGIN
 END
 
 SELECT * FROM COTIZACION;
+
+DROP PROCEDURE usp_RegistrarCotizacion;
