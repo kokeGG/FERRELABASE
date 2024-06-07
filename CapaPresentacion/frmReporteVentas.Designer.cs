@@ -45,6 +45,7 @@
             this.btnlimpiarbuscador = new FontAwesome.Sharp.IconButton();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.dgvdata = new System.Windows.Forms.DataGridView();
+            this.btnfacturar = new FontAwesome.Sharp.IconButton();
             this.FechaRegistro = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TipoDocumento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumeroDocumento = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -105,6 +106,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label3, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.txtfechainicio, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnbuscarreporte, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnfacturar, 5, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 48);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -311,6 +313,22 @@
             this.dgvdata.Size = new System.Drawing.Size(1318, 539);
             this.dgvdata.TabIndex = 0;
             // 
+            // btnfacturar
+            // 
+            this.btnfacturar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnfacturar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnfacturar.IconChar = FontAwesome.Sharp.IconChar.MoneyBill1Wave;
+            this.btnfacturar.IconColor = System.Drawing.Color.Gold;
+            this.btnfacturar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnfacturar.IconSize = 30;
+            this.btnfacturar.Location = new System.Drawing.Point(1001, 3);
+            this.btnfacturar.Name = "btnfacturar";
+            this.btnfacturar.Size = new System.Drawing.Size(120, 42);
+            this.btnfacturar.TabIndex = 8;
+            this.btnfacturar.Text = "Facturar";
+            this.btnfacturar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnfacturar.UseVisualStyleBackColor = true;
+            // 
             // FechaRegistro
             // 
             this.FechaRegistro.HeaderText = "Fecha Registro";
@@ -458,6 +476,7 @@
         private FontAwesome.Sharp.IconButton btnlimpiarbuscador;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.DataGridView dgvdata;
+        private FontAwesome.Sharp.IconButton btnfacturar;
         private System.Windows.Forms.DataGridViewTextBoxColumn FechaRegistro;
         private System.Windows.Forms.DataGridViewTextBoxColumn TipoDocumento;
         private System.Windows.Forms.DataGridViewTextBoxColumn NumeroDocumento;

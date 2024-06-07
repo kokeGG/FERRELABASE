@@ -619,6 +619,7 @@
             this.txtdoccliente.Name = "txtdoccliente";
             this.txtdoccliente.Size = new System.Drawing.Size(35, 22);
             this.txtdoccliente.TabIndex = 20;
+            this.txtdoccliente.Visible = false;
             // 
             // iconButton2
             // 

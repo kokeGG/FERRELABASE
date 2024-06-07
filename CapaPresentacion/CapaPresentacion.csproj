@@ -410,5 +410,8 @@
   <ItemGroup>
     <None Include="Resources\ticketCotizacion.html" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ticketVenta.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -40,8 +40,19 @@ namespace CapaPresentacion
 
             dgvdata.Rows.Clear();
 
+            decimal totalGeneral = 0;
+
             foreach (ReporteVenta rv in lista)
             {
+                // Intentar convertir SubTotal a decimal
+                decimal subTotal;
+                if (!decimal.TryParse(rv.SubTotal, out subTotal))
+                {
+                    // Manejar el caso en que la conversión falle, por ejemplo, asignando 0
+                    subTotal = 0;
+                }
+
+                totalGeneral += subTotal;
                 dgvdata.Rows.Add(new Object[]
                 {
                     rv.FechaRegistro,
@@ -59,6 +70,11 @@ namespace CapaPresentacion
                     rv.SubTotal
                 });
             }
+            // Agregar una fila adicional con el total general
+            dgvdata.Rows.Add(new object[]
+            {
+        "Total", "", "", "", "", "", "", "", "", "", "", "", totalGeneral.ToString("0.00")
+            });
         }
 
         private void btnbuscar_Click(object sender, EventArgs e)

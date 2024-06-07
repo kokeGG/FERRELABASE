@@ -1,5 +1,6 @@
 ﻿using CapaEntidad;
 using CapaNegocio;
+using DocumentFormat.OpenXml.Wordprocessing;
 using iTextSharp.text;
 using iTextSharp.text.pdf;
 using iTextSharp.tool.xml;
@@ -32,6 +33,7 @@ namespace CapaPresentacion
                 txttipodocumento.Text = oVenta.TipoDocumento;
                 txtusuario.Text = oVenta.oUsuario.NombreCompleto;
                 txtfecha.Text = oVenta.FechaRegistro;
+                txtid.Text = oVenta.IdVenta.ToString();
 
                 txtdoccliente.Text = oVenta.DocumentoCliente;
                 txtnombrecliente.Text = oVenta.NombreCliente;
@@ -40,6 +42,7 @@ namespace CapaPresentacion
                 foreach (Detalle_Venta dv in oVenta.oDetalleVenta)
                 {
                     dgvdata.Rows.Add(new object[] { dv.oProducto.Nombre, dv.PrecioVenta, dv.Cantidad, dv.SubTotal });
+                   
                 }
 
                 txtmontototal.Text = oVenta.MontoTotal.ToString("0.00");
@@ -70,7 +73,7 @@ namespace CapaPresentacion
                 return;
             }
 
-            string Texto_Html = Properties.Resources.PlantillaVenta.ToString();
+            string Texto_Html = Properties.Resources.ticketVenta.ToString();
             Negocio odatos = new CN_Negocio().ObtenerDatos();
 
             Texto_Html = Texto_Html.Replace("@nombrenegocio", odatos.Nombre.ToUpper());
@@ -109,7 +112,7 @@ namespace CapaPresentacion
             {
                 using (FileStream stream = new FileStream(savefile.FileName, FileMode.Create))
                 {
-                    Document pdfDoc = new Document(PageSize.A4, 25, 25, 25, 25);
+                    iTextSharp.text.Document pdfDoc = new iTextSharp.text.Document(iTextSharp.text.PageSize.A4, 25, 25, 25, 25);
 
                     PdfWriter writer = PdfWriter.GetInstance(pdfDoc, stream);
                     pdfDoc.Open();
@@ -139,5 +142,43 @@ namespace CapaPresentacion
             }
         }
 
+        private void btncancelar_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(txtid.Text) != 0)
+            {
+                var eliminarDialog = MessageBox.Show("¿Desea eliminar la venta?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (eliminarDialog == DialogResult.Yes)
+                {
+                    string mensaje = string.Empty;
+                    //Usuario objusuario = new Usuario()
+                    //{
+                    //    IdUsuario = Convert.ToInt32(txtid.Text),
+                    //};
+                    Venta objventa = new Venta()
+                    {
+                        IdVenta = Convert.ToInt32(txtid.Text),
+                    };
+                    //bool respuesta = new CN_Venta().Eliminar(objusuario, out mensaje);
+                    bool respuesta = new CN_Venta().EliminarVenta(objventa, out mensaje);
+                    if (respuesta)
+                    {
+                        MessageBox.Show("Venta eliminada", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        txtfecha.Text = "";
+                        txttipodocumento.Text = "";
+                        txtmontopago.Text = "";
+                        txtusuario.Text = "";
+                        txtdoccliente.Text = "";
+                        txtnombrecliente.Text = "";
+                        dgvdata.Rows.Clear();
+                        txtmontototal.Text = "";
+                        txtmontocambio.Text = "";
+                    }
+                    else
+                    {
+                        MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
+                }
+            }
+        }
     }
 }

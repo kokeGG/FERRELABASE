@@ -421,141 +421,162 @@ namespace CapaPresentacion
             //string usuarioActual = Environment.UserName;
             if (cbotipodocumento.Text == "Factura")
             {
-                if (cboformapago.SelectedItem == null)
+                var datosCorrectos = MessageBox.Show("¿Los datos son correctos?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if(datosCorrectos == DialogResult.Yes)
                 {
-                    MessageBox.Show("Debe seleccionar una forma de pago");
+                    if (cboformapago.SelectedItem == null)
+                    {
+                        MessageBox.Show("Debe seleccionar una forma de pago");
+                        return;
+                    }
+
+                
+                    //Obtener numero de certificado ............................
+
+                    //string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.cer";
+                    //string pathKey = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.key";
+
+                    string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\Personas Fisicas\FIEL_KICR630120NX3_20190528153320\kicr630120nx3.cer";
+                    string pathKey = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\Personas Fisicas\FIEL_KICR630120NX3_20190528153320\Claveprivada_FIEL_KICR630120NX3_20190528_153320.key";
+                    string clavePrivada = "12345678a";
+
+                    //Obtenemos el numero
+                    string numeroCertificado, aa, b, c;
+                    SelloDigital.leerCER(pathCer, out aa, out b, out c, out numeroCertificado);
+
+                    //LLENAR CLASE DE COMPROBANTEE
+                    Comprobante oComprobante = new Comprobante();
+                    oComprobante.Version = "4.1";
+                    oComprobante.Serie = "B";
+                    oComprobante.Folio = "1";
+
+                    oComprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
+                    //oComprobante.Sello = ""; //PROCESO XML SAT
+                    //oComprobante.FormaPago = c_FormaPago.Item27;
+
+                    OpcionCombo opcionSeleccionada = (OpcionCombo)cboformapago.SelectedItem;
+                    c_FormaPago formaPagoSeleccionada = (c_FormaPago)opcionSeleccionada.Valor;
+                    OpcionCombo cfdiSelected = (OpcionCombo)cbocfdi.SelectedItem;
+                    c_UsoCFDI cfdiSeleccionado = (c_UsoCFDI)cfdiSelected.Valor;
+
+                    oComprobante.FormaPago = formaPagoSeleccionada;
+                    oComprobante.NoCertificado = numeroCertificado; //PROCESO XML SAT
+                    //oComprobante.Certificado = ""; //PROCESO XML SAT
+                    oComprobante.SubTotal = 10m;
+                    oComprobante.Descuento = 1;
+                    oComprobante.Moneda = c_Moneda.MXN;
+                    oComprobante.Total = 9;
+                    oComprobante.TipoDeComprobante = c_TipoDeComprobante.I;
+                    oComprobante.MetodoPago = c_MetodoPago.PUE;
+                    oComprobante.LugarExpedicion = "39860"; //cpdigo postal
+                    ComprobanteEmisor oEmisor = new ComprobanteEmisor();
+                    oEmisor.Rfc = "VAZK980807PP2";
+                    oEmisor.Nombre = "KATE VIVIAN VAZQUEZ ZARATE";
+                    oEmisor.RegimenFiscal = c_RegimenFiscal.Item605;
+
+                    ComprobanteReceptor oReceptor = new ComprobanteReceptor();
+                    oReceptor.Nombre = txtnombrecliente.Text.ToString();
+                    oReceptor.Rfc = txtdocumentocliente.Text.ToString();
+                    oReceptor.UsoCFDI = cfdiSeleccionado;
+                    oReceptor.ResidenciaFiscal = c_Pais.MEX;
+                    //ASIGNO EMISOR Y RECEPTOR
+                    oComprobante.Emisor = oEmisor;
+                    oComprobante.Receptor = oReceptor;
+
+                    List<ComprobanteConcepto> lstConceptos = new List<ComprobanteConcepto>();
+                    //TODO: ITERAR SOBRE LOS PRODUTOS SELECCIONADOS
+                    foreach (DataGridViewRow row in dgvdata.Rows)
+                    {
+                        if (row.IsNewRow)
+                            continue;
+                        ComprobanteConcepto oConcepto = new ComprobanteConcepto();
+
+                        oConcepto.Importe = Convert.ToDecimal(row.Cells["SubTotal"].Value);
+                        oConcepto.ClaveProdServ = row.Cells["ClaveSat"].Value.ToString();
+                        oConcepto.Cantidad = Convert.ToDecimal(row.Cells["Cantidad"].Value);
+                        oConcepto.ClaveUnidad = row.Cells["UnidadSat"].Value.ToString();
+                        oConcepto.Descripcion = row.Cells["Producto"].Value.ToString();
+                        oConcepto.ValorUnitario = Convert.ToDecimal(row.Cells["Precio"].Value.ToString());
+                        oConcepto.Descuento = 0;
+
+                        lstConceptos.Add(oConcepto);
+
+                    }
+
+
+                    //ComprobanteConcepto oConcepto = new ComprobanteConcepto();
+                    //oConcepto.Importe = 10m;
+                    //oConcepto.ClaveProdServ = "cf3f3";
+                    //oConcepto.Cantidad = 1;
+                    //oConcepto.ClaveUnidad = "H87";
+                    //oConcepto.Descripcion = "Un misil para la guerra";
+                    //oConcepto.ValorUnitario = 10m;
+                    //oConcepto.Descuento = 1;
+                    //lstConceptos.Add(oConcepto);
+                    oComprobante.Conceptos = lstConceptos.ToArray();
+
+                    //CREAR XML 
+                    CreateXML(oComprobante);
+
+                    string cadenaOriginal = "";
+
+                    XmlUrlResolver resolver = new XmlUrlResolver();
+
+                    string pathxsl = $@"C:\Users\{currentUser}\source\repos\kokeGG\FERRELABASE\CapaPresentacion\Utilidades\CFDI40\cadenaoriginal_4_0.xslt";
+                    //string pathxsl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Utilidades", "CFDI40", "cadenaoriginal_4_0.xslt");
+
+                    Console.WriteLine(pathxsl);
+                    XslCompiledTransform transformador = new XslCompiledTransform(true);
+                    try
+                    {
+                        //transformador.Load(pathxsl);
+                        transformador.Load(pathxsl, XsltSettings.TrustedXslt, resolver);
+
+                    } catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    using (StringWriter sw = new StringWriter())
+                        using (XmlWriter xwo= XmlWriter.Create(sw, transformador.OutputSettings))
+                    {
+                        transformador.Transform(pathXML, xwo);
+                        cadenaOriginal = sw.ToString();
+                    }
+
+                    SelloDigital oSelloDigital = new SelloDigital();
+                    oComprobante.Certificado = oSelloDigital.Certificado(pathCer);
+                    oComprobante.Sello = oSelloDigital.Sellar(cadenaOriginal, pathKey, clavePrivada);
+
+                    CreateXML(oComprobante);
+
+                    //TIMBRE DEL XML
+                    ServiceReferenceFC.RespuestaCFDi respuestaCFDI = new ServiceReferenceFC.RespuestaCFDi();
+
+                    byte[] bXML = System.IO.File.ReadAllBytes(pathXML);
+
+                    ServiceReferenceFC.TimbradoClient oTimbrado = new ServiceReferenceFC.TimbradoClient();
+
+                    respuestaCFDI = oTimbrado.TimbrarTest("KICR630120NX3", "E494fC9e4A1d83Aa0100", bXML);
+
+                    if (respuestaCFDI.Documento == null)
+                    {
+                        Console.WriteLine(respuestaCFDI.Mensaje);
+                    } else
+                    {
+                        System.IO.File.WriteAllBytes(pathXML, respuestaCFDI.Documento);
+                    }
+
+
+
+
+
+
+                } else if (datosCorrectos == DialogResult.No)
+                {
                     return;
-                }
-                //Obtener numero de certificado ............................
-
-                //string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.cer";
-                //string pathKey = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.key";
-
-                string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\Personas Fisicas\FIEL_KICR630120NX3_20190528153320\kicr630120nx3.cer";
-                string pathKey = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\Personas Fisicas\FIEL_KICR630120NX3_20190528153320\Claveprivada_FIEL_KICR630120NX3_20190528_153320.key";
-                string clavePrivada = "12345678a";
-
-                //Obtenemos el numero
-                string numeroCertificado, aa, b, c;
-                SelloDigital.leerCER(pathCer, out aa, out b, out c, out numeroCertificado);
-
-                //LLENAR CLASE DE COMPROBANTEE
-                Comprobante oComprobante = new Comprobante();
-                oComprobante.Version = "4.1";
-                oComprobante.Serie = "B";
-                oComprobante.Folio = "1";
-                oComprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
-                //oComprobante.Sello = ""; //PROCESO XML SAT
-                //oComprobante.FormaPago = c_FormaPago.Item27;
-                OpcionCombo opcionSeleccionada = (OpcionCombo)cboformapago.SelectedItem;
-                c_FormaPago formaPagoSeleccionada = (c_FormaPago)opcionSeleccionada.Valor;
-                oComprobante.FormaPago = formaPagoSeleccionada;
-                oComprobante.NoCertificado = numeroCertificado; //PROCESO XML SAT
-                //oComprobante.Certificado = ""; //PROCESO XML SAT
-                oComprobante.SubTotal = 10m;
-                oComprobante.Descuento = 1;
-                oComprobante.Moneda = c_Moneda.MXN;
-                oComprobante.Total = 9;
-                oComprobante.TipoDeComprobante = c_TipoDeComprobante.I;
-                oComprobante.MetodoPago = c_MetodoPago.PUE;
-                oComprobante.LugarExpedicion = "39860"; //cpdigo postal
-                ComprobanteEmisor oEmisor = new ComprobanteEmisor();
-                oEmisor.Rfc = "VAZK980807PP2";
-                oEmisor.Nombre = "KATE VIVIAN VAZQUEZ ZARATE";
-                oEmisor.RegimenFiscal = c_RegimenFiscal.Item605;
-
-                ComprobanteReceptor oReceptor = new ComprobanteReceptor();
-                oReceptor.Nombre = txtnombrecliente.Text.ToString();
-                oReceptor.Rfc = txtdocumentocliente.Text.ToString();
-                oReceptor.UsoCFDI = c_UsoCFDI.G01;
-                oReceptor.ResidenciaFiscal = c_Pais.MEX;
-                //ASIGNO EMISOR Y RECEPTOR
-                oComprobante.Emisor = oEmisor;
-                oComprobante.Receptor = oReceptor;
-
-                List<ComprobanteConcepto> lstConceptos = new List<ComprobanteConcepto>();
-                //TODO: ITERAR SOBRE LOS PRODUTOS SELECCIONADOS
-                foreach (DataGridViewRow row in dgvdata.Rows)
-                {
-                    if (row.IsNewRow)
-                        continue;
-                    ComprobanteConcepto oConcepto = new ComprobanteConcepto();
-
-                    oConcepto.Importe = Convert.ToDecimal(row.Cells["SubTotal"].Value);
-                    oConcepto.ClaveProdServ = row.Cells["ClaveSat"].Value.ToString();
-                    oConcepto.Cantidad = Convert.ToDecimal(row.Cells["Cantidad"].Value);
-                    oConcepto.ClaveUnidad = row.Cells["UnidadSat"].Value.ToString();
-                    oConcepto.Descripcion = row.Cells["Producto"].Value.ToString();
-                    oConcepto.ValorUnitario = Convert.ToDecimal(row.Cells["Precio"].Value.ToString());
-                    oConcepto.Descuento = 0;
-
-                    lstConceptos.Add(oConcepto);
-
-                }
-
-
-                //ComprobanteConcepto oConcepto = new ComprobanteConcepto();
-                //oConcepto.Importe = 10m;
-                //oConcepto.ClaveProdServ = "cf3f3";
-                //oConcepto.Cantidad = 1;
-                //oConcepto.ClaveUnidad = "H87";
-                //oConcepto.Descripcion = "Un misil para la guerra";
-                //oConcepto.ValorUnitario = 10m;
-                //oConcepto.Descuento = 1;
-                //lstConceptos.Add(oConcepto);
-                oComprobante.Conceptos = lstConceptos.ToArray();
-
-                //CREAR XML 
-                CreateXML(oComprobante);
-
-                string cadenaOriginal = "";
-
-                XmlUrlResolver resolver = new XmlUrlResolver();
-
-                string pathxsl = $@"C:\Users\{currentUser}\source\repos\kokeGG\FERRELABASE\CapaPresentacion\Utilidades\CFDI40\cadenaoriginal_4_0.xslt";
-                //string pathxsl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Utilidades", "CFDI40", "cadenaoriginal_4_0.xslt");
-
-                Console.WriteLine(pathxsl);
-                XslCompiledTransform transformador = new XslCompiledTransform(true);
-                try
-                {
-                    //transformador.Load(pathxsl);
-                    transformador.Load(pathxsl, XsltSettings.TrustedXslt, resolver);
-
-                } catch (Exception ex)
-                {
-                    MessageBox.Show($"Error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
-
-                using (StringWriter sw = new StringWriter())
-                    using (XmlWriter xwo= XmlWriter.Create(sw, transformador.OutputSettings))
-                {
-                    transformador.Transform(pathXML, xwo);
-                    cadenaOriginal = sw.ToString();
-                }
-
-                SelloDigital oSelloDigital = new SelloDigital();
-                oComprobante.Certificado = oSelloDigital.Certificado(pathCer);
-                oComprobante.Sello = oSelloDigital.Sellar(cadenaOriginal, pathKey, clavePrivada);
-
-                CreateXML(oComprobante);
-
-                //TIMBRE DEL XML
-                ServiceReferenceFC.RespuestaCFDi respuestaCFDI = new ServiceReferenceFC.RespuestaCFDi();
-
-                byte[] bXML = System.IO.File.ReadAllBytes(pathXML);
-
-                ServiceReferenceFC.TimbradoClient oTimbrado = new ServiceReferenceFC.TimbradoClient();
-
-                respuestaCFDI = oTimbrado.TimbrarTest("KICR630120NX3", "E494fC9e4A1d83Aa0100", bXML);
-
-                if (respuestaCFDI.Documento == null)
-                {
-                    Console.WriteLine(respuestaCFDI.Mensaje);
-                } else
-                {
-                    System.IO.File.WriteAllBytes(pathXML, respuestaCFDI.Documento);
                 }
 
             }
