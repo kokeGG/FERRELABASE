@@ -2,29 +2,30 @@
 DROP PROCEDURE sp_RegistrarCliente;
 
 CREATE PROC sp_RegistrarCliente(
-@Documento VARCHAR(50),
-@RazonSocial VARCHAR(50),
+@Codigo VARCHAR(50),
 @RFC VARCHAR(50),
 @NombreCompleto VARCHAR(50),
-@Correo VARCHAR(50),
-@Telefono VARCHAR(50),
-@Estado BIT,
-@CP VARCHAR(10),
-@DIRECCION VARCHAR(100),
+@Calle VARCHAR(50),
+@NoExt VARCHAR(100),
+@NoInt VARCHAR(100),
 @Colonia VARCHAR(100),
-@Numero VARCHAR(10),
-@Ciudad VARCHAR(100),
-@Edo VARCHAR(100),
+@CodigoPostal VARCHAR(10),
+@Municipio VARCHAR(100),
+@Poblacion VARCHAR(100),
+@Edo VARCHAR(50),
+@Correo VARCHAR(50),
+@Regimen VARCHAR(50),
+@Estado BIT,
 @Resultado INT OUTPUT,
 @Mensaje VARCHAR(500) OUTPUT
 )AS
 BEGIN
 	SET @Resultado = 0
 	DECLARE @IDPERSONA INT
-	IF NOT EXISTS (SELECT * FROM CLIENTE WHERE Documento = @Documento)
+	IF NOT EXISTS (SELECT * FROM CLIENTE WHERE Codigo = @Codigo)
 	BEGIN
-		INSERT INTO CLIENTE(Documento, RazonSocial, RFC, NombreCompleto, Correo, Telefono, Estado, CP, DIRECCION, Colonia, Numero, Ciudad, Edo) VALUES (
-		@Documento, @RazonSocial, @RFC, @NombreCompleto, @Correo, @Telefono, @Estado, @CP, @DIRECCION, @Colonia, @Numero, @Ciudad, @Edo)
+		INSERT INTO CLIENTE(Codigo, RFC, NombreCompleto, Calle, NoExt, NoInt, Colonia, CodigoPostal, Municipio, Poblacion, Edo, Correo, Regimen, Estado) VALUES (
+		@Codigo, @RFC, @NombreCompleto, @Calle, @NoExt, @NoInt, @Colonia, @CodigoPostal, @Municipio, @Poblacion, @Edo, @Correo, @Regimen, @Estado)
 
 		SET @Resultado = SCOPE_IDENTITY()
 	END
@@ -38,41 +39,44 @@ DROP PROCEDURE sp_ModificarCliente;
 
 CREATE PROC sp_ModificarCliente(
 @IdCliente INT,
-@Documento VARCHAR(50),
-@RazonSocial VARCHAR(50),
-@RFC VARCHAR(50),
+@Codigo VARCHAR(50),
+@3
+RFC VARCHAR(50),
 @NombreCompleto VARCHAR(50),
-@Correo VARCHAR(50),
-@Telefono VARCHAR(50),
-@Estado BIT,
-@CP VARCHAR(10),
-@DIRECCION VARCHAR(100),
+@Calle VARCHAR(50),
+@NoExt VARCHAR(100),
+@NoInt VARCHAR(100),
 @Colonia VARCHAR(100),
-@Numero VARCHAR(10),
-@Ciudad VARCHAR(100),
-@Edo VARCHAR(100),
-@Resultado BIT OUTPUT,
+@CodigoPostal VARCHAR(10),
+@Municipio VARCHAR(100),
+@Poblacion VARCHAR(100),
+@Edo VARCHAR(50),
+@Correo VARCHAR(50),
+@Regimen VARCHAR(50),
+@Estado BIT,
+@Resultado INT OUTPUT,
 @Mensaje VARCHAR(500) OUTPUT
 )AS
 BEGIN
 	SET @Resultado = 1
 	DECLARE @IDPERSONA INT
-	IF NOT EXISTS (SELECT * FROM CLIENTE WHERE Documento = @Documento and IdCliente != @IdCliente)
+	IF NOT EXISTS (SELECT * FROM CLIENTE WHERE Codigo = @Codigo and IdCliente != @IdCliente)
 	BEGIN
 		UPDATE CLIENTE SET
-		Documento = @Documento,
-		RazonSocial = @RazonSocial,
+		Codigo = @Codigo,
 		RFC = @RFC,
 		NombreCompleto = @NombreCompleto,
-		Correo = @Correo,
-		Telefono = @Telefono,
-		Estado = @Estado,
-		CP = @CP,
-		DIRECCION = @DIRECCION,
+		Calle = @Calle,
+		NoExt = @NoExt,
+		NoInt = @NoInt,
 		Colonia = @Colonia,
-		Numero = @Numero,
-		Ciudad = @Ciudad,
-		Edo = @Edo
+		CodigoPostal = @CodigoPostal,
+		Municipio = @Municipio,
+		Poblacion = @Poblacion,
+		Edo = @Edo,
+		Correo = @Correo,
+		Estado = @Estado,
+		Regimen = @Regimen
 		WHERE IdCliente = @IdCliente
 	END
 	ELSE

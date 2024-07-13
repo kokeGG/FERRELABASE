@@ -88,7 +88,8 @@ public partial class Comprobante {
     private string confirmacionField;
 
     [XmlAttribute("schemaLocation", Namespace = XmlSchema.InstanceNamespace)]
-    public string xsiSchemaLocation = "https://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
+    //public string xsiSchemaLocation = "https://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
+    public string xsiSchemaLocation = "http://www.sat.gob.mx/cfd/4 http://www.sat.gob.mx/sitio_internet/cfd/4/cfdv40.xsd";
 
 
     public Comprobante() {

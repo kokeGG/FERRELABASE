@@ -39,6 +39,8 @@
             this.Documento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NombreCompleto = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RFC = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.CP = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.RegimenFiscal = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvdata)).BeginInit();
             this.SuspendLayout();
             // 
@@ -123,7 +125,9 @@
             this.dgvdata.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.Documento,
             this.NombreCompleto,
-            this.RFC});
+            this.RFC,
+            this.CP,
+            this.RegimenFiscal});
             this.dgvdata.Location = new System.Drawing.Point(9, 129);
             this.dgvdata.Name = "dgvdata";
             this.dgvdata.ReadOnly = true;
@@ -156,6 +160,22 @@
             this.RFC.Name = "RFC";
             this.RFC.ReadOnly = true;
             this.RFC.Width = 200;
+            // 
+            // CP
+            // 
+            this.CP.HeaderText = "CP";
+            this.CP.MinimumWidth = 6;
+            this.CP.Name = "CP";
+            this.CP.ReadOnly = true;
+            this.CP.Width = 125;
+            // 
+            // RegimenFiscal
+            // 
+            this.RegimenFiscal.HeaderText = "Regimen Fiscal";
+            this.RegimenFiscal.MinimumWidth = 6;
+            this.RegimenFiscal.Name = "RegimenFiscal";
+            this.RegimenFiscal.ReadOnly = true;
+            this.RegimenFiscal.Width = 125;
             // 
             // mdCliente
             // 
@@ -193,5 +213,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Documento;
         private System.Windows.Forms.DataGridViewTextBoxColumn NombreCompleto;
         private System.Windows.Forms.DataGridViewTextBoxColumn RFC;
+        private System.Windows.Forms.DataGridViewTextBoxColumn CP;
+        private System.Windows.Forms.DataGridViewTextBoxColumn RegimenFiscal;
     }
 }

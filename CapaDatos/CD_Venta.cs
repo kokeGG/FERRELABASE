@@ -21,7 +21,7 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("select count(*) + 1 from VENTA");
+                    query.AppendLine("SELECT CAST(CAST(MAX(NumeroDocumento) AS INT) + 1 AS VARCHAR) FROM VENTA");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = CommandType.Text;
 

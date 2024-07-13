@@ -77,6 +77,26 @@ namespace CapaPresentacion
             }
         }
 
+        private void txtpreciocompra_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                // Verifica si el valor de txtpreciocompra es un número válido
+                if (decimal.TryParse(txtpreciocompra.Text, out decimal precioCompra))
+                {
+                    // Calcula el precio con IVA (16%)
+                    decimal precioVenta = precioCompra * 1.16m;
+
+                    // Asigna el precio calculado a txtprecioventa
+                    txtprecioventa.Text = Math.Round(precioVenta, 2, MidpointRounding.AwayFromZero).ToString("F2");
+                }
+                else
+                {
+                    MessageBox.Show("Por favor, ingrese un valor numérico válido en el campo de precio de compra.", "Valor inválido", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
         private void btnbuscarproducto_Click(object sender, EventArgs e)
         {
             using (var modal = new mdProducto())

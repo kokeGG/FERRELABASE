@@ -33,7 +33,8 @@ CREATE TABLE CLIENTE(
 	Correo VARCHAR(50),
 	Telefono VARCHAR(50),
 	Estado bit,
-	FechaRegistro DATETIME DEFAULT GETDATE()
+	FechaRegistro DATETIME DEFAULT GETDATE(),
+	RegimenFiscal VARCHAR(5)
 );
 
 CREATE TABLE USUARIO(

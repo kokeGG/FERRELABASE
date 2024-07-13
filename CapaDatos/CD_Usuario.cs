@@ -32,7 +32,7 @@ namespace CapaDatos
 
                     //string query = "SELECT IdUsuario, Documento, NombreCompleto, Correo, Clave, Estado FROM USUARIO";
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT u.IdUsuario, u.Documento, u.NombreCompleto, u.Correo, u.Clave, u.Estado, r.IdRol, r.Descripcion FROM USUARIO u");
+                    query.AppendLine("SELECT u.IdUsuario, u.Codigo, u.NombreCompleto, u.Correo, u.Clave, u.Estado, r.IdRol, r.Descripcion FROM USUARIO u");
                     query.AppendLine("INNER JOIN ROL r ON r.IdRol = u.IdRol");
 
                     using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
@@ -46,7 +46,7 @@ namespace CapaDatos
                                 lista.Add(new Usuario()
                                 {
                                     IdUsuario = Convert.ToInt32(dr["IdUsuario"]),
-                                    Documento = dr["Documento"].ToString(),
+                                    Codigo = dr["Codigo"].ToString(),
                                     NombreCompleto = dr["NombreCompleto"].ToString(),
                                     Correo = dr["Correo"].ToString(),
                                     Clave = dr["Clave"].ToString(),
@@ -76,7 +76,7 @@ namespace CapaDatos
                 using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
                 {
                     SqlCommand cmd = new SqlCommand("SP_REGISTRARUSUARIO", oconexion);
-                    cmd.Parameters.AddWithValue("Documento", obj.Documento);
+                    cmd.Parameters.AddWithValue("Codigo", obj.Codigo);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Clave", obj.Clave);
@@ -115,7 +115,7 @@ namespace CapaDatos
                 {
                     SqlCommand cmd = new SqlCommand("SP_EDITARUSUARIO", oconexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.IdUsuario);
-                    cmd.Parameters.AddWithValue("Documento", obj.Documento);
+                    cmd.Parameters.AddWithValue("Codigo", obj.Codigo);
                     cmd.Parameters.AddWithValue("NombreCompleto", obj.NombreCompleto);
                     cmd.Parameters.AddWithValue("Correo", obj.Correo);
                     cmd.Parameters.AddWithValue("Clave", obj.Clave);

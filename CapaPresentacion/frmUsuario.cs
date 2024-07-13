@@ -64,7 +64,7 @@ namespace CapaPresentacion
                 {
                     "",
                     item.IdUsuario,
-                    item.Documento,
+                    item.Codigo,
                     item.NombreCompleto,
                     item.Correo,
                     item.Clave,
@@ -84,7 +84,7 @@ namespace CapaPresentacion
             Usuario objusuario = new Usuario()
             {
                 IdUsuario = Convert.ToInt32(txtid.Text),
-                Documento = txtdocumento.Text,
+                Codigo = txtdocumento.Text,
                 NombreCompleto = txtnombrecompleto.Text,
                 Correo = txtcorreo.Text,
                 Clave = txtclave.Text,
@@ -123,7 +123,7 @@ namespace CapaPresentacion
                 {
                     DataGridViewRow row = dgvdata.Rows[Convert.ToInt32(txtindice.Text)];
                     row.Cells["Id"].Value = txtid.Text;
-                    row.Cells["Documento"].Value = txtdocumento.Text;
+                    row.Cells["Codigo"].Value = txtdocumento.Text;
                     row.Cells["NombreCompleto"].Value = txtnombrecompleto.Text;
                     row.Cells["Correo"].Value = txtcorreo.Text;
                     row.Cells["Clave"].Value = txtclave.Text;
@@ -192,7 +192,7 @@ namespace CapaPresentacion
 
                     txtindice.Text = indice.ToString();
                     txtid.Text = dgvdata.Rows[indice].Cells["Id"].Value.ToString();
-                    txtdocumento.Text = dgvdata.Rows[indice].Cells["Documento"].Value.ToString();
+                    txtdocumento.Text = dgvdata.Rows[indice].Cells["Codigo"].Value.ToString();
                     txtnombrecompleto.Text = dgvdata.Rows[indice].Cells["NombreCompleto"].Value.ToString();
                     txtcorreo.Text = dgvdata.Rows[indice].Cells["Correo"].Value.ToString();
                     txtclave.Text = dgvdata.Rows[indice].Cells["Clave"].Value.ToString();

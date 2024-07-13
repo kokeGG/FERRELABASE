@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 using System.Xml.Xsl;
 using XSDToXML.Utils;
@@ -30,8 +31,12 @@ namespace CapaPresentacion
     public partial class frmVentas : Form
     {
         static string currentUser = Environment.UserName;
-        static private string path = $@"C:\Users\{currentUser}\source\repos\kokeGG\FERRELABASE";
-        static string pathXML = path + @"miPrimerXML.xml";
+        //static private string path = $@"C:\Users\{currentUser}\source\repos\kokeGG\FERRELABASE";
+        //static private string path = $@"C:\BASECOT\";
+
+        //static string pathXML = path + @"XML.xml";
+        //static string pathXML = path;
+
 
         private Usuario _Usuario;
         public frmVentas(Usuario oUsuario = null)
@@ -39,7 +44,11 @@ namespace CapaPresentacion
             _Usuario = oUsuario;
             InitializeComponent();
         }
-
+        public string pathXML(string txtrfc, string numeroDocumento)
+        {
+            string path = $@"C:\PARAFACTURAR\{txtrfc}_{numeroDocumento}.xml";
+            return path;
+        }
         private void frmVentas_Load(object sender, EventArgs e)
         {
             cbotipodocumento.Items.Add(new OpcionCombo() { Valor = "Venta_General", Texto = "Venta General" });
@@ -48,15 +57,20 @@ namespace CapaPresentacion
             cbotipodocumento.ValueMember = "Valor";
             cbotipodocumento.SelectedIndex = 0;
 
-            foreach (c_FormaPago formaPago in Enum.GetValues(typeof(c_FormaPago)))
+            int[] formasPago = { 01, 02, 03, 04, 05, 06, 08, 12, 13, 14, 15, 17, 23, 24, 25, 26, 27, 28, 29, 30, 31, 99 };
+
+
+            foreach (int formaPago in formasPago)
             {
                 string nombreFormaPago = ObtenerNombreFormaPago(formaPago);
 
-                cboformapago.Items.Add(new OpcionCombo() { Valor = formaPago, Texto = nombreFormaPago });
-                cboformapago.DisplayMember = "Texto";
-                cboformapago.ValueMember = "Valor";
-                cboformapago.SelectedIndex = 0;
-
+                if (!string.IsNullOrWhiteSpace(nombreFormaPago))
+                {
+                    cboformapago.Items.Add(new OpcionCombo() { Valor = formaPago, Texto = nombreFormaPago });
+                    cboformapago.DisplayMember = "Texto";
+                    cboformapago.ValueMember = "Valor";
+                    cboformapago.SelectedIndex = 0;
+                }
             }
 
             //cbocfdi.Items.Clear();
@@ -87,53 +101,54 @@ namespace CapaPresentacion
             txtcambio.Text = "";
             txttotalpagar.Text = "0";
         }
-        private string ObtenerNombreFormaPago(c_FormaPago formaPago)
+
+        private string ObtenerNombreFormaPago(int formaPago)
         {
             switch (formaPago)
             {
-                case c_FormaPago.Item01:
+                case 01:
                     return "Efectivo";
-                case c_FormaPago.Item02:
+                case 02:
                     return "Cheque nominativo";
-                case c_FormaPago.Item03:
+                case 03:
                     return "Transferencia electrónica de fondos";
-                case c_FormaPago.Item04:
+                case 04:
                     return "Tarjeta de crédito";
-                case c_FormaPago.Item05:
+                case 05:
                     return "Monedero electrónico";
-                case c_FormaPago.Item06:
+                case 06:
                     return "Dinero electrónico";
-                case c_FormaPago.Item08:
+                case 08:
                     return "Vales de despensa";
-                case c_FormaPago.Item12:
+                case 12:
                     return "Dación en pago";
-                case c_FormaPago.Item13:
+                case 13:
                     return "Pago por subrogación";
-                case c_FormaPago.Item14:
+                case 14:
                     return "Pago por consignación";
-                case c_FormaPago.Item15:
+                case 15:
                     return "Condonación";
-                case c_FormaPago.Item17:
+                case 17:
                     return "Compensación";
-                case c_FormaPago.Item23:
+                case 23:
                     return "Novación";
-                case c_FormaPago.Item24:
+                case 24:
                     return "Confusión";
-                case c_FormaPago.Item25:
+                case 25:
                     return "Remisión de deuda";
-                case c_FormaPago.Item26:
+                case 26:
                     return "Prescripción o caducidad";
-                case c_FormaPago.Item27:
+                case 27:
                     return "A satisfacción del acreedor";
-                case c_FormaPago.Item28:
+                case 28:
                     return "Tarjeta de débito";
-                case c_FormaPago.Item29:
+                case 29:
                     return "Tarjeta de servicios";
-                case c_FormaPago.Item30:
+                case 30:
                     return "Aplicación de anticipos";
-                case c_FormaPago.Item31:
+                case 31:
                     return "Intermediario pagos";
-                case c_FormaPago.Item99:
+                case 99:
                     return "Por definir";
                 default:
                     return "";
@@ -157,6 +172,62 @@ namespace CapaPresentacion
             }
         }
 
+        private c_RegimenFiscal RegimenFiscal(string regimen)
+        {
+            switch (regimen)
+            {
+                case "601":
+                    return c_RegimenFiscal.Item601;
+                case "603":
+                    return c_RegimenFiscal.Item603;
+                case "605":
+                    return c_RegimenFiscal.Item605;
+                case "606":
+                    return c_RegimenFiscal.Item606;
+                case "607":
+                    return c_RegimenFiscal.Item607;
+                case "608":
+                    return c_RegimenFiscal.Item608;
+                case "609":
+                    return c_RegimenFiscal.Item609;
+                case "610":
+                    return c_RegimenFiscal.Item610;
+                case "611":
+                    return c_RegimenFiscal.Item611;
+                case "612":
+                    return c_RegimenFiscal.Item612;
+                case "614":
+                    return c_RegimenFiscal.Item614;
+                case "615":
+                    return c_RegimenFiscal.Item615;
+                case "616":
+                    return c_RegimenFiscal.Item616;
+                case "620":
+                    return c_RegimenFiscal.Item620;
+                case "621":
+                    return c_RegimenFiscal.Item621;
+                case "622":
+                    return c_RegimenFiscal.Item622;
+                case "623":
+                    return c_RegimenFiscal.Item623;
+                case "624":
+                    return c_RegimenFiscal.Item624;
+                case "625":
+                    return c_RegimenFiscal.Item625;
+                case "626":
+                    return c_RegimenFiscal.Item626;
+                case "628":
+                    return c_RegimenFiscal.Item628;
+                case "629":
+                    return c_RegimenFiscal.Item629;
+                case "630":
+                    return c_RegimenFiscal.Item630;
+                default:
+                    return 0;
+            }
+        }
+
+
         private void btnbuscarcliente_Click(object sender, EventArgs e)
         {
             using (var modal = new mdCliente())
@@ -166,8 +237,10 @@ namespace CapaPresentacion
                 if (result == DialogResult.OK)
                 {
                     txtdocumentocliente.Text = modal._Cliente.RFC;
-                    txtdoccliente.Text = modal._Cliente.Documento;
+                    txtdoccliente.Text = modal._Cliente.Codigo;
                     txtnombrecliente.Text = modal._Cliente.NombreCompleto;
+                    txtcp.Text = modal._Cliente.CodigoPostal;
+                    txtregimen.Text = modal._Cliente.Regimen;
                     txtcodigoproducto.Select();
                 }
                 else
@@ -189,7 +262,7 @@ namespace CapaPresentacion
                     txtidproducto.Text = modal._Producto.IdProducto.ToString();
                     txtcodigoproducto.Text = modal._Producto.Codigo;
                     txtnombreproducto.Text = modal._Producto.Nombre;
-                    txtprecio.Text = modal._Producto.PrecioVenta.ToString("0.00");
+                    txtprecio.Text = modal._Producto.Precio.ToString("0.00");
                     txtstock.Text = modal._Producto.Stock.ToString();
                     txtclavesat.Text = modal._Producto.ClaveSat.ToString();
                     txtunidadsat.Text = modal._Producto.UnidadSat.ToString();
@@ -344,9 +417,6 @@ namespace CapaPresentacion
 
                 }
             }
-
-
-
         }
 
         private void txtpagocon_KeyDown(object sender, KeyEventArgs e)
@@ -393,7 +463,7 @@ namespace CapaPresentacion
                     row.Cells["IdProducto"].Value.ToString(),
                     row.Cells["Precio"].Value.ToString(),
                     row.Cells["Cantidad"].Value.ToString(),
-                    row.Cells["SubTotal"].Value.ToString(),
+                    row.Cells["SubTotal"].Value.ToString()
                 });
             }
 
@@ -423,7 +493,7 @@ namespace CapaPresentacion
             {
                 var datosCorrectos = MessageBox.Show("¿Los datos son correctos?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                if(datosCorrectos == DialogResult.Yes)
+                if (datosCorrectos == DialogResult.Yes)
                 {
                     if (cboformapago.SelectedItem == null)
                     {
@@ -431,15 +501,16 @@ namespace CapaPresentacion
                         return;
                     }
 
-                
+
                     //Obtener numero de certificado ............................
 
                     //string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.cer";
                     //string pathKey = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.key";
 
-                    string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\Personas Fisicas\FIEL_KICR630120NX3_20190528153320\kicr630120nx3.cer";
-                    string pathKey = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\Personas Fisicas\FIEL_KICR630120NX3_20190528153320\Claveprivada_FIEL_KICR630120NX3_20190528_153320.key";
-                    string clavePrivada = "12345678a";
+                    string pathCer = $@"C:\SELLOS 2021\00001000000506024244.cer";
+                    string pathKey = $@"C:\SELLOS 2021\CSD_FERREBASE_VAZK980807PP2_20201216_103716.key";
+                    string clavePrivada = "MIKIEM12";
+
 
                     //Obtenemos el numero
                     string numeroCertificado, aa, b, c;
@@ -447,132 +518,274 @@ namespace CapaPresentacion
 
                     //LLENAR CLASE DE COMPROBANTEE
                     Comprobante oComprobante = new Comprobante();
-                    oComprobante.Version = "4.1";
+                    oComprobante.Version = "4.0";
                     oComprobante.Serie = "B";
-                    oComprobante.Folio = "1";
+                    oComprobante.Folio = numeroDocumento;
 
                     oComprobante.Fecha = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss");
                     //oComprobante.Sello = ""; //PROCESO XML SAT
                     //oComprobante.FormaPago = c_FormaPago.Item27;
 
                     OpcionCombo opcionSeleccionada = (OpcionCombo)cboformapago.SelectedItem;
-                    c_FormaPago formaPagoSeleccionada = (c_FormaPago)opcionSeleccionada.Valor;
+                    int formaPagoSeleccionada = (int)opcionSeleccionada.Valor;
+                    string formaPagoNombre = (string)opcionSeleccionada.Texto;
+
                     OpcionCombo cfdiSelected = (OpcionCombo)cbocfdi.SelectedItem;
                     c_UsoCFDI cfdiSeleccionado = (c_UsoCFDI)cfdiSelected.Valor;
+                    string cfdiNombre = (string)cfdiSelected.Texto;
 
-                    oComprobante.FormaPago = formaPagoSeleccionada;
+
+
+                    //oComprobante.FormaPago = formaPagoSeleccionada;
                     oComprobante.NoCertificado = numeroCertificado; //PROCESO XML SAT
                     //oComprobante.Certificado = ""; //PROCESO XML SAT
-                    oComprobante.SubTotal = 10m;
-                    oComprobante.Descuento = 1;
+                    //oComprobante.SubTotal = 10m;
+                    //oComprobante.Descuento = 1;
                     oComprobante.Moneda = c_Moneda.MXN;
-                    oComprobante.Total = 9;
+                    //oComprobante.Total = 9;
                     oComprobante.TipoDeComprobante = c_TipoDeComprobante.I;
+                    //oComprobante.Exportacion = c_Exportacion.Item01;
                     oComprobante.MetodoPago = c_MetodoPago.PUE;
-                    oComprobante.LugarExpedicion = "39860"; //cpdigo postal
+                    oComprobante.LugarExpedicion = "76343"; //cpdigo postal
                     ComprobanteEmisor oEmisor = new ComprobanteEmisor();
-                    oEmisor.Rfc = "VAZK980807PP2";
-                    oEmisor.Nombre = "KATE VIVIAN VAZQUEZ ZARATE";
-                    oEmisor.RegimenFiscal = c_RegimenFiscal.Item605;
+                    //oEmisor.Rfc = "VAZK980807PP2";
+                    oEmisor.Rfc = "XIA190128J61";
+                    //oEmisor.Nombre = "KATE VIVIAN VAZQUEZ ZARATE";
+                    oEmisor.Nombre = "XENON INDUSTRIAL ARTICLES";
+                    oEmisor.RegimenFiscal = c_RegimenFiscal.Item622;
 
                     ComprobanteReceptor oReceptor = new ComprobanteReceptor();
                     oReceptor.Nombre = txtnombrecliente.Text.ToString();
+                    //oReceptor.Nombre = "KATE VIVIAN VAZQUEZ ZARATE";
                     oReceptor.Rfc = txtdocumentocliente.Text.ToString();
+                    //oReceptor.Rfc = "VAZK980807PP2";
                     oReceptor.UsoCFDI = cfdiSeleccionado;
+                    //oReceptor.DomicilioFiscalReceptor = "39860".ToString();
+                    oReceptor.DomicilioFiscalReceptor = txtcp.Text.ToString();
                     oReceptor.ResidenciaFiscal = c_Pais.MEX;
+                    oReceptor.RegimenFiscalReceptor = RegimenFiscal(txtregimen.Text);
+                    //oReceptor.RegimenFiscalReceptor = c_RegimenFiscal.Item606;
+                    
                     //ASIGNO EMISOR Y RECEPTOR
                     oComprobante.Emisor = oEmisor;
                     oComprobante.Receptor = oReceptor;
 
+                    decimal totalImpuestosTrasladados = 0.00m;
+                    decimal subtotal = 0.00m;
+                    decimal baseTotal = 0.0m;
                     List<ComprobanteConcepto> lstConceptos = new List<ComprobanteConcepto>();
+
+                    var detalleElement = new XElement("DETALLE");
+
                     //TODO: ITERAR SOBRE LOS PRODUTOS SELECCIONADOS
                     foreach (DataGridViewRow row in dgvdata.Rows)
                     {
                         if (row.IsNewRow)
                             continue;
-                        ComprobanteConcepto oConcepto = new ComprobanteConcepto();
+                        var precio = Math.Round(Convert.ToDouble(row.Cells["Precio"].Value), 2, MidpointRounding.AwayFromZero);
+                        var cantidad = Math.Round(Convert.ToDouble(row.Cells["Cantidad"].Value), 2, MidpointRounding.AwayFromZero);
+                        var total = precio * cantidad;
+                        var precio_sin_impuesto = precio / 1.16;
+                        var t_impuesto = (total - (precio_sin_impuesto * cantidad));
+                        var renglonElement = new XElement("RENGLON",
+                            new XAttribute("Clave", row.Cells["Codigo"].Value.ToString()),
+                            new XAttribute("c_ClaveProdServ", row.Cells["ClaveSat"].Value.ToString()),
+                            new XAttribute("Nombre", row.Cells["Producto"].Value.ToString()),
+                            new XAttribute("Cantidad", row.Cells["Cantidad"].Value.ToString()),
+                            new XAttribute("Unidad", row.Cells["ClaveSat"].Value.ToString()),//PZA, KG, ETC...
+                            new XAttribute("c_ClaveUnidad", row.Cells["UnidadSat"].Value.ToString()),
+                            //new XAttribute("Precio", row.Cells["Precio"].Value.ToString()),//Precio con impuesto unitario / 1.16
+                            new XAttribute("Precio", precio_sin_impuesto.ToString()),//Precio con impuesto unitario / 1.16
+                            new XAttribute("Descuento", "0.00"),
+                            new XAttribute("Importe", precio_sin_impuesto * cantidad), //(precio con impuesto unitario / 1.16) * cantidad
+                            new XAttribute("c_ObjetoImp", "02"),
+                            new XAttribute("c_Impuesto", "002"),
+                            new XAttribute("c_NombreImpuesto", "IVA"),
+                            new XAttribute("c_TipoFactor", "TASA"),
+                            new XAttribute("c_TasaOCuota", "0.160000"),
+                            new XAttribute("t_impuesto", t_impuesto.ToString()),//(Precio * cantidad) - ((precio con impuesto unitario / 1.16) * cantidad)
+                            new XAttribute("Total", total.ToString())//(Precio con impuesto * cantidad)
+                        );
 
-                        oConcepto.Importe = Convert.ToDecimal(row.Cells["SubTotal"].Value);
-                        oConcepto.ClaveProdServ = row.Cells["ClaveSat"].Value.ToString();
-                        oConcepto.Cantidad = Convert.ToDecimal(row.Cells["Cantidad"].Value);
-                        oConcepto.ClaveUnidad = row.Cells["UnidadSat"].Value.ToString();
-                        oConcepto.Descripcion = row.Cells["Producto"].Value.ToString();
-                        oConcepto.ValorUnitario = Convert.ToDecimal(row.Cells["Precio"].Value.ToString());
-                        oConcepto.Descuento = 0;
+                        detalleElement.Add(renglonElement);
 
-                        lstConceptos.Add(oConcepto);
+                        //ComprobanteConcepto oConcepto = new ComprobanteConcepto();
 
+                        //// Crear una instancia de ComprobanteConceptoImpuestosRetencion
+                        //ComprobanteConceptoImpuestosTraslado traslado = new ComprobanteConceptoImpuestosTraslado
+                        //{
+                        //    Impuesto = c_Impuesto.Item002, // ISR
+                        //    TipoFactor = c_TipoFactor.Tasa,
+                        //    TasaOCuota = 0.160000m, // Asigna el valor correcto para TasaOCuota
+                        //    //Importe = Convert.ToDecimal(Convert.ToDouble(row.Cells["PrecioCompra"].Value) * 0.16),
+                        //    //Importe = Convert.ToDecimal(Convert.ToDouble(txtpreciocompra.Text) * 0.16),
+                        //    //Importe = 16.0000m,
+                        //    Importe = Math.Round(Convert.ToDecimal(Convert.ToDouble(row.Cells["PrecioCompra"].Value) * 0.16), 2, MidpointRounding.AwayFromZero) * Convert.ToDecimal(row.Cells["Cantidad"].Value),
+                        //    Base = Math.Round(Convert.ToDecimal(row.Cells["PrecioCompra"].Value) * Convert.ToDecimal(row.Cells["Cantidad"].Value), 2, MidpointRounding.AwayFromZero),
+                        //    TasaOCuotaSpecified = true,
+                        //    ImporteSpecified = true
+                        //};
+                        //baseTotal += traslado.Base;
+                        ////totalImpuestosTrasladados += Convert.ToDecimal(Convert.ToDouble(row.Cells["PrecioCompra"].Value) * 0.16);
+                        //totalImpuestosTrasladados += Math.Round(Convert.ToDecimal(Convert.ToDouble(row.Cells["PrecioCompra"].Value) * 0.16), 2, MidpointRounding.AwayFromZero) * Convert.ToDecimal(row.Cells["Cantidad"].Value);
+                        //subtotal += Math.Round(Convert.ToDecimal(row.Cells["PrecioCompra"].Value) * Convert.ToDecimal(row.Cells["Cantidad"].Value), 2, MidpointRounding.AwayFromZero);
+                        ////subtotal += Convert.ToDecimal(Convert.ToDouble(row.Cells["PrecioCompra"].Value));
+                        //// Asignar la instancia de retencion a oConcepto.Impuestos.Retenciones
+                        //oConcepto.Impuestos = new ComprobanteConceptoImpuestos
+                        //{
+                        //    Traslados = new ComprobanteConceptoImpuestosTraslado[] { traslado }
+                        //};
+
+                        //oConcepto.Importe = Math.Round(Convert.ToDecimal(row.Cells["PrecioCompra"].Value) * Convert.ToDecimal(row.Cells["Cantidad"].Value), 2, MidpointRounding.AwayFromZero);
+                        //oConcepto.ClaveProdServ = row.Cells["ClaveSat"].Value.ToString();
+                        //oConcepto.Cantidad = Convert.ToDecimal(row.Cells["Cantidad"].Value);
+                        //oConcepto.ClaveUnidad = row.Cells["UnidadSat"].Value.ToString();
+                        //oConcepto.Descripcion = row.Cells["Producto"].Value.ToString();
+                        //oConcepto.ValorUnitario = Convert.ToDecimal(row.Cells["Precio"].Value.ToString());
+                        ////oConcepto.Descuento = 0;
+                        //oConcepto.ObjetoImp =  c_ObjetoImp.Item02;
+                        //oConcepto.NoIdentificacion = row.Cells["Codigo"].Value.ToString();
+
+                        //lstConceptos.Add(oConcepto);
                     }
-
-
-                    //ComprobanteConcepto oConcepto = new ComprobanteConcepto();
-                    //oConcepto.Importe = 10m;
-                    //oConcepto.ClaveProdServ = "cf3f3";
-                    //oConcepto.Cantidad = 1;
-                    //oConcepto.ClaveUnidad = "H87";
-                    //oConcepto.Descripcion = "Un misil para la guerra";
-                    //oConcepto.ValorUnitario = 10m;
-                    //oConcepto.Descuento = 1;
-                    //lstConceptos.Add(oConcepto);
+                    oComprobante.SubTotal = Math.Truncate(subtotal * 100) / 100;
+                    oComprobante.Total = decimal.Parse(txttotalpagar.Text);
                     oComprobante.Conceptos = lstConceptos.ToArray();
 
+                    ComprobanteImpuestosTraslado trasladoCFDI = new ComprobanteImpuestosTraslado
+                    {
+                        Impuesto = c_Impuesto.Item002, // ISR
+                        TipoFactor = c_TipoFactor.Tasa,
+                        // Asignar los valores correspondientes a las demás propiedades de retencion
+                        TasaOCuota = 0.160000m, // Asigna el valor correcto para TasaOCuota
+                                                //Importe = Convert.ToDecimal(row.Cells["SubTotal"].Value),
+                                                //Importe = Math.Round((Math.Truncate(totalImpuestosTrasladados * 100) / 100), 2, MidpointRounding.AwayFromZero),
+                        Importe = Math.Truncate(totalImpuestosTrasladados * 100) / 100,
+                        Base = Math.Truncate(baseTotal * 100) / 100,
+                        TasaOCuotaSpecified = true,
+                        ImporteSpecified = true
+                    };
+
+                    // Asignar la instancia de trasladoCFDI a oImpuestos.Traslados
+                    ComprobanteImpuestos oImpuestos = new ComprobanteImpuestos
+                    {
+                        TotalImpuestosTrasladadosSpecified = true,
+                        TotalImpuestosTrasladados = (Math.Truncate(totalImpuestosTrasladados * 100) / 100),
+                        Traslados = new ComprobanteImpuestosTraslado[] { trasladoCFDI }
+                    };
+
+                    // Asignar oImpuestos a los impuestos del concepto o de la factura
+                    // Dependiendo de donde necesites asignarlo:
+                    oComprobante.Impuestos = oImpuestos;
+
                     //CREAR XML 
-                    CreateXML(oComprobante);
+                    //CreateXML(oComprobante, txtdocumentocliente.Text.ToString(), numeroDocumento);
+                    var xml = new XDocument(
+                        new XElement("MOVIMIENTOS",
+                            new XElement("DOCUMENTO",
+                                new XAttribute("c_Moneda", "MXN"),
+                                new XAttribute("FolioInterno", numeroDocumento),
+                                new XAttribute("c_TipoDeComprobante", "I"),
+                                new XAttribute("Fecha", DateTime.Now.ToString("yyyy-MM-dd")),
+                                new XAttribute("Hora", DateTime.Now.ToString("HH:mm:ss")),
+                                new XAttribute("c_UsoCFDI", cfdiSeleccionado),
+                                new XAttribute("t_Usocfdi", cfdiNombre),
+                                new XAttribute("Importe", "129.31"),
+                                new XAttribute("Descuento", "0.00"),
+                                new XAttribute("Subtotal", "129.31"),
+                                new XAttribute("Iva", "20.69"),
+                                new XAttribute("Total", "150.00"),
+                                new XAttribute("CondicionPago", "CONTADO"),
+                                new XAttribute("c_FormaPago", formaPagoSeleccionada),
+                                new XAttribute("CtaPago", ""),
+                                new XAttribute("t_FormaPago", formaPagoNombre),
+                                new XAttribute("c_MetodoPago", "PUE"),
+                                new XAttribute("t_MetodoPago", "Pago en una sola exhibición"),
+                                new XAttribute("c_Exportacion", "01"),
+                                new XElement("Emisor",
+                                    new XAttribute("rfc", txtdocumentocliente.Text),
+                                    new XAttribute("nombre", txtnombrecliente.Text),
+                                    new XAttribute("FacAtrAdquiriente", ""),
+                                    new XElement("DomicilioFiscal",
+                                        new XAttribute("calle", "CALLE 4"),
+                                        new XAttribute("noExterior", "LOCALES 5 Y 6"),
+                                        new XAttribute("noInterior", ""),
+                                        new XAttribute("colonia", "ICACOS"),
+                                        new XAttribute("localidad", "ACAPULCO"),
+                                        new XAttribute("municipio", "ACAPULCO DE JUAREZ"),
+                                        new XAttribute("estado", "GUERRERO"),
+                                        new XAttribute("pais", "MEXICO"),
+                                        new XAttribute("codigoPostal", "39860")
+                                    ),
+                                    new XElement("RegimenFiscal",
+                                        new XAttribute("c_RegimenFiscal", "621"),
+                                        new XAttribute("Regimen", "REGIMEN DE INCORPORACION FISCAL")
+                                    )
+                                ),
+                                new XElement("CLIENTE",
+                                    new XAttribute("RefCliente", "8574"),
+                                    new XAttribute("Cliente", "DISEÑO OBRAS Y MANTENIMIENTO DE INSTALACIONES PETROLERAS DEL"),
+                                    new XAttribute("Mail", "brindizamalia@gmail.com"),
+                                    new XAttribute("RFC", "DOM0203074Y0"),
+                                    new XAttribute("DomicilioFiscalReceptor", "91110"),
+                                    new XAttribute("c_RegimenFiscalReceptor", "601"),
+                                    new XElement("DOMICILIO",
+                                        new XAttribute("Calle", "AV LAZARO CARDENAS"),
+                                        new XAttribute("NoExt", "1004"),
+                                        new XAttribute("NoInt", "............."),
+                                        new XAttribute("Colonia", "RAFAEL LUCIO"),
+                                        new XAttribute("Poblacion", "XALAPA VERACRUZ"),
+                                        new XAttribute("Municipio", "XALAPA"),
+                                        new XAttribute("Estado", "XALAPA VERACRUZ"),
+                                        new XAttribute("Pais", "MEXICO"),
+                                        new XAttribute("CP", "91110")
+                                    )
+                                ),
+                                detalleElement
+                            )
+                        )
+                    );
 
-                    string cadenaOriginal = "";
+                    string filePath = $@"C:\PARAFACTURAR\{numeroDocumento}.xml";
+                    xml.Save(filePath);
+                    Console.WriteLine($"XML creado exitosamente en {filePath}.");
 
-                    XmlUrlResolver resolver = new XmlUrlResolver();
+                    //string cadenaOriginal = "";
 
-                    string pathxsl = $@"C:\Users\{currentUser}\source\repos\kokeGG\FERRELABASE\CapaPresentacion\Utilidades\CFDI40\cadenaoriginal_4_0.xslt";
-                    //string pathxsl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Utilidades", "CFDI40", "cadenaoriginal_4_0.xslt");
+                    //XmlUrlResolver resolver = new XmlUrlResolver();
 
-                    Console.WriteLine(pathxsl);
-                    XslCompiledTransform transformador = new XslCompiledTransform(true);
-                    try
-                    {
-                        //transformador.Load(pathxsl);
-                        transformador.Load(pathxsl, XsltSettings.TrustedXslt, resolver);
+                    ////string pathxsl = $@"C:\Users\{currentUser}\source\repos\kokeGG\FERRELABASE\CapaPresentacion\Utilidades\CFDI40\cadenaoriginal_4_0.xslt";
+                    //string pathxsl = $@"C:\PARAFACTURAR\CFDI40\cadenaoriginal_4_0.xslt";
 
-                    } catch (Exception ex)
-                    {
-                        MessageBox.Show($"Error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        return;
-                    }
+                    ////string pathxsl = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Utilidades", "CFDI40", "cadenaoriginal_4_0.xslt");
 
-                    using (StringWriter sw = new StringWriter())
-                        using (XmlWriter xwo= XmlWriter.Create(sw, transformador.OutputSettings))
-                    {
-                        transformador.Transform(pathXML, xwo);
-                        cadenaOriginal = sw.ToString();
-                    }
+                    //Console.WriteLine(pathxsl);
+                    //XslCompiledTransform transformador = new XslCompiledTransform(true);
+                    //try
+                    //{
+                    //    //transformador.Load(pathxsl);
+                    //    transformador.Load(pathxsl, XsltSettings.TrustedXslt, resolver);
 
-                    SelloDigital oSelloDigital = new SelloDigital();
-                    oComprobante.Certificado = oSelloDigital.Certificado(pathCer);
-                    oComprobante.Sello = oSelloDigital.Sellar(cadenaOriginal, pathKey, clavePrivada);
+                    //} catch (Exception ex)
+                    //{
+                    //    MessageBox.Show($"Error {ex}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    //    return;
+                    //}
 
-                    CreateXML(oComprobante);
+                    //using (StringWriter sw = new StringWriter())
+                    //    using (XmlWriter xwo= XmlWriter.Create(sw, transformador.OutputSettings))
+                    //{
+                    //    transformador.Transform(pathXML(txtdocumentocliente.Text, numeroDocumento), xwo);
+                    //    cadenaOriginal = sw.ToString();
+                    //}
+
+                    //SelloDigital oSelloDigital = new SelloDigital();
+                    //oComprobante.Certificado = oSelloDigital.Certificado(pathCer);
+                    //oComprobante.Sello = oSelloDigital.Sellar(cadenaOriginal, pathKey, clavePrivada);
+
+                    //CreateXML(oComprobante, txtdocumentocliente.Text.ToString(), numeroDocumento);
 
                     //TIMBRE DEL XML
-                    ServiceReferenceFC.RespuestaCFDi respuestaCFDI = new ServiceReferenceFC.RespuestaCFDi();
-
-                    byte[] bXML = System.IO.File.ReadAllBytes(pathXML);
-
-                    ServiceReferenceFC.TimbradoClient oTimbrado = new ServiceReferenceFC.TimbradoClient();
-
-                    respuestaCFDI = oTimbrado.TimbrarTest("KICR630120NX3", "E494fC9e4A1d83Aa0100", bXML);
-
-                    if (respuestaCFDI.Documento == null)
-                    {
-                        Console.WriteLine(respuestaCFDI.Mensaje);
-                    } else
-                    {
-                        System.IO.File.WriteAllBytes(pathXML, respuestaCFDI.Documento);
-                    }
-
-
-
-
-
 
                 } else if (datosCorrectos == DialogResult.No)
                 {
@@ -724,31 +937,34 @@ namespace CapaPresentacion
                 MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
-        private static void CreateXML(Comprobante oComprobante)
+        private static void CreateXML(Comprobante oComprobante, string doccliente, string numeroDocumento)
         {
             //SERIALIZAMOS.---------------------------------------------------------------
+
+            //XmlSerializerNamespaces xmlNameSpace = new XmlSerializerNamespaces();
+            //xmlNameSpace.Add("cfdi", "http://www.sat.gob.mx/cfd/4");
+            //xmlNameSpace.Add("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
+            //xmlNameSpace.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
+
+
+            //XmlSerializer oXmlSerializar = new XmlSerializer(typeof(Comprobante));
+
+            //string sXml = "";
+
+            //using (var sww = new StringWriterWithEncoding(Encoding.UTF8))
+            //{
+            //    using (XmlWriter writter = XmlWriter.Create(sww))
+            //    {
+            //        oXmlSerializar.Serialize(writter, oComprobante, xmlNameSpace);
+            //        sXml = sww.ToString();
+            //    }
+            //}
+
+            ////guardamos el archivo
+            //System.IO.File.WriteAllText($@"C:\PARAFACTURAR\{doccliente}_{numeroDocumento}.xml", sXml);
+            DateTime now = DateTime.Now;
+
             
-            XmlSerializerNamespaces xmlNameSpace = new XmlSerializerNamespaces();
-            xmlNameSpace.Add("cfdi", "http://www.sat.gob.mx/cfd/4");
-            xmlNameSpace.Add("tfd", "http://www.sat.gob.mx/TimbreFiscalDigital");
-            xmlNameSpace.Add("xsi", "http://www.w3.org/2001/XMLSchema-instance");
-
-
-            XmlSerializer oXmlSerializar = new XmlSerializer(typeof(Comprobante));
-
-            string sXml = "";
-
-            using (var sww = new StringWriterWithEncoding(Encoding.UTF8))
-            {
-                using (XmlWriter writter = XmlWriter.Create(sww))
-                {
-                    oXmlSerializar.Serialize(writter, oComprobante, xmlNameSpace);
-                    sXml = sww.ToString();
-                }
-            }
-
-            //guardamos el archivo
-            System.IO.File.WriteAllText(pathXML, sXml);
         }
 
         private void btnagregar_Click(object sender, EventArgs e)
@@ -804,6 +1020,8 @@ namespace CapaPresentacion
                         "",
                         txtclavesat.Text,
                         txtunidadsat.Text,
+                        txtpreciocompra.Text,
+                        txtcodigoproducto.Text,
                     });
 
                     calcularTotal();
@@ -826,7 +1044,7 @@ namespace CapaPresentacion
                     txtcodigoproducto.BackColor = Color.Honeydew;
                     txtidproducto.Text = oProducto.IdProducto.ToString();
                     txtnombreproducto.Text = oProducto.Nombre;
-                    txtprecio.Text = oProducto.PrecioVenta.ToString("0.00");
+                    txtprecio.Text = oProducto.Precio.ToString("0.00");
                     txtstock.Text = oProducto.Stock.ToString();
                     txtunidadsat.Text = oProducto.UnidadSat.ToString();
                     txtclavesat.Text = oProducto.ClaveSat.ToString();
@@ -841,6 +1059,7 @@ namespace CapaPresentacion
                     txtstock.Text = "";
                     txtunidadsat.Text = "";
                     txtclavesat.Text = "";
+                    txtpreciocompra.Text = "";
                     txtcantidad.Value = 1;
                 }
             }

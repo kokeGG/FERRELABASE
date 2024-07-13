@@ -37,7 +37,7 @@ namespace CapaPresentacion.Modales
             foreach (Cliente item in lista)
             {
                 if (item.Estado)
-                    dgvdata.Rows.Add(new object[] { item.Documento, item.NombreCompleto, item.RFC });
+                    dgvdata.Rows.Add(new object[] { item.Codigo, item.NombreCompleto, item.RFC, item.CodigoPostal, item.Regimen });
             }
         }
 
@@ -49,9 +49,12 @@ namespace CapaPresentacion.Modales
             {
                 _Cliente = new Cliente()
                 {
-                    Documento = dgvdata.Rows[iRow].Cells["Documento"].Value.ToString(),
+                    Codigo = dgvdata.Rows[iRow].Cells["Codigo"].Value.ToString(),
                     NombreCompleto = dgvdata.Rows[iRow].Cells["NombreCompleto"].Value.ToString(),
-                    RFC = dgvdata.Rows[iRow].Cells["RFC"].Value.ToString()
+                    RFC = dgvdata.Rows[iRow].Cells["RFC"].Value.ToString(),
+                    CodigoPostal = dgvdata.Rows[iRow].Cells["CodigoPostal"].Value.ToString(),
+                    Regimen = dgvdata.Rows[iRow].Cells["Regimen"].Value.ToString(),
+
                 };
                 this.DialogResult = DialogResult.OK;
                 this.Close();

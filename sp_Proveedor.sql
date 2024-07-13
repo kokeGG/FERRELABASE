@@ -105,7 +105,7 @@ CREATE PROCEDURE sp_RegistrarCompra(
 @IdUsuario int,
 @IdProveedor int,
 @TipoDocumento VARCHAR(500),
-@NumeroDocumento VARCHAR(500),
+@Codigo VARCHAR(500),
 @MontoTotal decimal(18,2),
 @DetalleCompra [EDetalle_Compra] READONLY,
 @Resultado bit output,
@@ -121,8 +121,8 @@ BEGIN
 
 		BEGIN TRANSACTION registro
 
-		insert into COMPRA(IdUsuario, IdProveedor, TipoDocumento, NumeroDocumento, MontoTotal)
-		VALUES (@IdUsuario, @IdProveedor, @TipoDocumento, @NumeroDocumento, @MontoTotal)
+		insert into COMPRA(IdUsuario, IdProveedor, TipoDocumento, Codigo, MontoTotal)
+		VALUES (@IdUsuario, @IdProveedor, @TipoDocumento, @Codigo, @MontoTotal)
 
 		SET @idcompra = SCOPE_IDENTITY()
 
@@ -131,8 +131,7 @@ BEGIN
 
 
 		UPDATE p set p.Stock = p.Stock + dc.Cantidad,
-		p.PrecioCompra = dc.PrecioCompra,
-		p.PrecioVenta = dc.PrecioVenta
+		p.Precio = dc.PrecioVenta
 		from PRODUCTO p
 		INNER JOIN @DetalleCompra dc ON dc.IdProducto = p.IdProducto
 

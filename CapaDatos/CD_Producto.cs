@@ -32,7 +32,7 @@ namespace CapaDatos
 
                     //string query = "SELECT IdProducto, Documento, NombreCompleto, Correo, Clave, Estado FROM Producto";
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT p.IdProducto, p.UnidadSat, p.ClaveSat, p.Codigo, p.Nombre, p.Descripcion, c.IdCategoria, c.Descripcion[DescripcionCategoria], p.Stock, p.PrecioCompra, p.PrecioVenta, p.Estado FROM PRODUCTO p");
+                    query.AppendLine("SELECT p.IdProducto, p.UnidadSat, p.ClaveSat, p.Codigo, p.Nombre, p.Descripcion, c.IdCategoria, c.Descripcion[DescripcionCategoria], p.Stock, p.Precio, p.Estado, p.UltimoPrecio FROM PRODUCTO p");
                     query.AppendLine("INNER JOIN CATEGORIA c ON c.IdCategoria = p.IdCategoria");
 
                     using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
@@ -53,9 +53,9 @@ namespace CapaDatos
                                     Descripcion = dr["Descripcion"].ToString(),
                                     oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(dr["IdCategoria"]), Descripcion = dr["DescripcionCategoria"].ToString() },
                                     Stock = Convert.ToInt32(dr["Stock"].ToString()),
-                                    PrecioCompra = Convert.ToDecimal(dr["PrecioCompra"].ToString()),
-                                    PrecioVenta = Convert.ToDecimal(dr["PrecioVenta"].ToString()),
+                                    Precio = Convert.ToDecimal(dr["Precio"].ToString()),
                                     Estado = Convert.ToBoolean(dr["Estado"]),
+                                    UltimoPrecio = Convert.ToDateTime(dr["UltimoPrecio"])
                                 });
                             }
                         }
@@ -86,6 +86,8 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Nombre", obj.Nombre);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("IdCategoria", obj.oCategoria.IdCategoria);
+                    cmd.Parameters.AddWithValue("Stock", obj.Stock);
+                    cmd.Parameters.AddWithValue("Precio", obj.Precio);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
@@ -126,6 +128,9 @@ namespace CapaDatos
                     cmd.Parameters.AddWithValue("Nombre", obj.Nombre);
                     cmd.Parameters.AddWithValue("Descripcion", obj.Descripcion);
                     cmd.Parameters.AddWithValue("IdCategoria", obj.oCategoria.IdCategoria);
+                    cmd.Parameters.AddWithValue("Stock", obj.Stock);
+                    cmd.Parameters.AddWithValue("Precio", obj.Precio);
+                    cmd.Parameters.AddWithValue("UltimoPrecio", obj.UltimoPrecio);
                     cmd.Parameters.AddWithValue("Estado", obj.Estado);
                     cmd.Parameters.Add("Resultado", SqlDbType.Int).Direction = ParameterDirection.Output;
                     cmd.Parameters.Add("Mensaje", SqlDbType.VarChar, 500).Direction = ParameterDirection.Output;
@@ -182,6 +187,57 @@ namespace CapaDatos
             }
 
             return respuesta;
+        }
+
+        public Producto ObtenerProductoPorId(int idProducto)
+        {
+            Producto producto = null;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+                try
+                {
+                    oconexion.Open();
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT p.IdProducto, p.UnidadSat, p.ClaveSat, p.Codigo, p.Nombre, p.Descripcion, c.IdCategoria, c.Descripcion[DescripcionCategoria], p.Stock, p.Precio, p.Estado, p.UltimoPrecio");
+                    query.AppendLine("FROM PRODUCTO p");
+                    query.AppendLine("INNER JOIN CATEGORIA c ON c.IdCategoria = p.IdCategoria");
+                    query.AppendLine("WHERE p.IdProducto = @IdProducto");
+
+                    using (SqlCommand cmd = new SqlCommand(query.ToString(), oconexion))
+                    {
+                        cmd.Parameters.AddWithValue("@IdProducto", idProducto);
+                        cmd.CommandType = CommandType.Text;
+
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.Read())
+                            {
+                                producto = new Producto()
+                                {
+                                    IdProducto = Convert.ToInt32(dr["IdProducto"]),
+                                    UnidadSat = dr["UnidadSat"].ToString(),
+                                    ClaveSat = dr["ClaveSat"].ToString(),
+                                    Codigo = dr["Codigo"].ToString(),
+                                    Nombre = dr["Nombre"].ToString(),
+                                    Descripcion = dr["Descripcion"].ToString(),
+                                    oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(dr["IdCategoria"]), Descripcion = dr["DescripcionCategoria"].ToString() },
+                                    Stock = Convert.ToInt32(dr["Stock"].ToString()),
+                                    Precio = Convert.ToDecimal(dr["Precio"].ToString()),
+                                    Estado = Convert.ToBoolean(dr["Estado"]),
+                                    UltimoPrecio = Convert.ToDateTime(dr["UltimoPrecio"])
+                                };
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Excepción producida: {ex.GetType().Name} - {ex.Message}");
+                }
+            }
+
+            return producto;
         }
     }
 }

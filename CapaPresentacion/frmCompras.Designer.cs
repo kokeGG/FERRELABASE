@@ -412,6 +412,7 @@
             this.txtpreciocompra.Name = "txtpreciocompra";
             this.txtpreciocompra.Size = new System.Drawing.Size(200, 30);
             this.txtpreciocompra.TabIndex = 8;
+            this.txtpreciocompra.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtpreciocompra_KeyDown);
             this.txtpreciocompra.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtpreciocompra_KeyPress);
             // 
             // label8

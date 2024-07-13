@@ -62,6 +62,8 @@ namespace CapaPresentacion
             dgvdata.Rows.Clear();
             txtmontototal.Text = "";
             txtmontocambio.Text = "";
+            txtnumerodocumento.Text = "";
+            txtid.Text = "";
         }
 
         private void btndescargar_Click(object sender, EventArgs e)
@@ -172,6 +174,8 @@ namespace CapaPresentacion
                         dgvdata.Rows.Clear();
                         txtmontototal.Text = "";
                         txtmontocambio.Text = "";
+                        txtnumerodocumento.Text = "";
+                        txtid.Text = "";
                     }
                     else
                     {

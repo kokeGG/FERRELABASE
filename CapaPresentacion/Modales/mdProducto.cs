@@ -48,10 +48,11 @@ namespace CapaPresentacion.Modales
                     item.Nombre,
                     item.oCategoria.Descripcion,
                     item.Stock,
-                    item.PrecioCompra,
-                    item.PrecioVenta,
+                    item.Precio,
                     item.UnidadSat,
-                    item.ClaveSat
+                    item.ClaveSat,
+                    item.Precio,
+                    item.UltimoPrecio
                 });
             }
 
@@ -69,10 +70,10 @@ namespace CapaPresentacion.Modales
                     Codigo = dgvdata.Rows[iRow].Cells["Codigo"].Value.ToString(),
                     Nombre = dgvdata.Rows[iRow].Cells["Nombre"].Value.ToString(),
                     Stock = Convert.ToInt32(dgvdata.Rows[iRow].Cells["Stock"].Value.ToString()),
-                    PrecioCompra = Convert.ToDecimal(dgvdata.Rows[iRow].Cells["PrecioCompra"].Value.ToString()),
-                    PrecioVenta = Convert.ToDecimal(dgvdata.Rows[iRow].Cells["PrecioVenta"].Value.ToString()),
+                    Precio = Convert.ToDecimal(dgvdata.Rows[iRow].Cells["Precio"].Value.ToString()),
                     UnidadSat = dgvdata.Rows[iRow].Cells["UnidadSat"].Value.ToString(),
-                    ClaveSat = dgvdata.Rows[iRow].Cells["ClaveSat"].Value.ToString()
+                    ClaveSat = dgvdata.Rows[iRow].Cells["ClaveSat"].Value.ToString(),
+                    UltimoPrecio = Convert.ToDateTime(dgvdata.Rows[iRow].Cells["UltimoPrecio"].Value.ToString())
                 };
                 this.DialogResult = DialogResult.OK;
                 this.Close();

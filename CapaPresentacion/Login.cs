@@ -32,7 +32,7 @@ namespace CapaPresentacion
 
         private void iconButton1_Click(object sender, EventArgs e)
         {
-            Usuario ousuario = new CN_Usuario().Listar().Where(u => u.Documento == txtDocumento.Text && u.Clave == txtClave.Text).FirstOrDefault();
+            Usuario ousuario = new CN_Usuario().Listar().Where(u => u.Codigo == txtDocumento.Text && u.Clave == txtClave.Text).FirstOrDefault();
 
             if (ousuario != null)
             {

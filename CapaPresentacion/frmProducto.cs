@@ -71,10 +71,10 @@ namespace CapaPresentacion
                     item.oCategoria.IdCategoria,
                     item.oCategoria.Descripcion,
                     item.Stock,
-                    item.PrecioCompra,
-                    item.PrecioVenta,
+                    item.Precio,
                     item.Estado == true ? 1 : 0 ,
-                    item.Estado == true ? "Activo" : "No Activo"
+                    item.Estado == true ? "Activo" : "No Activo",
+                    item.UltimoPrecio
                 });
             }
         }
@@ -92,8 +92,22 @@ namespace CapaPresentacion
                 Nombre = txtnombre.Text,
                 Descripcion = txtdescripcion.Text,
                 oCategoria = new Categoria() { IdCategoria = Convert.ToInt32(((OpcionCombo)cbocategoria.SelectedItem).Valor) },
-                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false
+                Estado = Convert.ToInt32(((OpcionCombo)cboestado.SelectedItem).Valor) == 1 ? true : false,
+                Precio = Convert.ToDecimal(txtprecio.Text),
+                Stock = Convert.ToInt32(txtstock.Text), 
             };
+
+            // Obtener el producto actual de la base de datos
+            Producto productoExistente = new CN_Producto().ObtenerProductoPorId(objProducto.IdProducto);
+
+            if (productoExistente != null && productoExistente.Precio == objProducto.Precio)
+            {
+                objProducto.UltimoPrecio = productoExistente.UltimoPrecio;
+            }
+            else
+            {
+                objProducto.UltimoPrecio = DateTime.Now;
+            }
 
             if (objProducto.IdProducto == 0)
             {
@@ -112,11 +126,11 @@ namespace CapaPresentacion
                         txtdescripcion.Text,
                         ((OpcionCombo)cbocategoria.SelectedItem).Valor.ToString(),
                         ((OpcionCombo)cbocategoria.SelectedItem).Texto.ToString(),
-                        "0",
-                        "0.00",
-                        "0.00",
+                        txtstock.Text,
+                        txtprecio.Text,
                         ((OpcionCombo)cboestado.SelectedItem).Valor.ToString(),
-                        ((OpcionCombo)cboestado.SelectedItem).Texto.ToString()
+                        ((OpcionCombo)cboestado.SelectedItem).Texto.ToString(),
+                        objProducto.UltimoPrecio,
                      });
                     Limpiar();
                 }
@@ -130,7 +144,7 @@ namespace CapaPresentacion
             else
             {
                 bool resultado = new CN_Producto().Editar(objProducto, out mensaje);
-
+               
                 if (resultado)
                 {
                     DataGridViewRow row = dgvdata.Rows[Convert.ToInt32(txtindice.Text)];
@@ -142,8 +156,11 @@ namespace CapaPresentacion
                     row.Cells["Descripcion"].Value = txtdescripcion.Text;
                     row.Cells["IdCategoria"].Value = ((OpcionCombo)cbocategoria.SelectedItem).Valor.ToString();
                     row.Cells["Categoria"].Value = ((OpcionCombo)cbocategoria.SelectedItem).Texto.ToString();
+                    row.Cells["Stock"].Value = txtstock.Text;
+                    row.Cells["Precio"].Value = txtprecio.Text;
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboestado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboestado.SelectedItem).Texto.ToString();
+                    row.Cells["UltimoPrecio"].Value = objProducto.UltimoPrecio;
 
                     Limpiar();
                 }
@@ -166,8 +183,10 @@ namespace CapaPresentacion
             txtdescripcion.Text = "";
             cbocategoria.SelectedIndex = 0;
             cboestado.SelectedIndex = 0;
-
+            txtprecio.Text = "";
             txtcodigo.Select();
+            txtstock.Text = "";
+            txtultimoprecio.Text = "";
 
         }
 
@@ -208,8 +227,9 @@ namespace CapaPresentacion
                     txtclaveSAT.Text = dgvdata.Rows[indice].Cells["ClaveSat"].Value.ToString();
                     txtnombre.Text = dgvdata.Rows[indice].Cells["Nombre"].Value.ToString();
                     txtdescripcion.Text = dgvdata.Rows[indice].Cells["Descripcion"].Value.ToString();
-                    
-
+                    txtprecio.Text = dgvdata.Rows[indice].Cells["Precio"].Value.ToString();
+                    txtstock.Text = dgvdata.Rows[indice].Cells["Stock"].Value.ToString();
+                    txtultimoprecio.Text = dgvdata.Rows[indice].Cells["UltimoPrecio"].Value.ToString();
 
                     foreach (OpcionCombo oc in cbocategoria.Items)
                     {
@@ -322,11 +342,13 @@ namespace CapaPresentacion
                             row.Cells[2].Value.ToString(),
                             row.Cells[3].Value.ToString(),
                             row.Cells[4].Value.ToString(),
+                            row.Cells[5].Value.ToString(),
                             row.Cells[6].Value.ToString(),
-                            row.Cells[7].Value.ToString(),
                             row.Cells[8].Value.ToString(),
                             row.Cells[9].Value.ToString(),
-                            row.Cells[11].Value.ToString(),
+                            row.Cells[10].Value.ToString(),
+                            row.Cells[12].Value.ToString(),
+                            row.Cells[13].Value.ToString(),
                         });
                     }
                 }

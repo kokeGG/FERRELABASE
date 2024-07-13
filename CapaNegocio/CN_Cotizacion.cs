@@ -35,5 +35,9 @@ namespace CapaNegocio
 
             return oCotizacion;
         }
+        public bool EliminarCotizacion(Cotizacion obj, out string Mensaje)
+        {
+            return objcd_cotizacion.EliminarCotizacion(obj, out Mensaje);
+        }
     }
 }

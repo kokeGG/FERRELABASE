@@ -19,7 +19,7 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
 
-            if (obj.Documento == "")
+            if (obj.Codigo == "")
             {
                 Mensaje += "Es necesario el documento del usuario\n";
             }
@@ -48,7 +48,7 @@ namespace CapaNegocio
         {
             Mensaje = string.Empty;
 
-            if (obj.Documento == "")
+            if (obj.Codigo == "")
             {
                 Mensaje += "Es necesario el documento del usuario\n";
             }

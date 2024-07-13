@@ -9,9 +9,9 @@ GO
 
 CREATE PROCEDURE usp_RegistrarVenta(
 @IdUsuario INT,
-@TipoDocumento VARCHAR(500),
-@NumeroDocumento VARCHAR(500),
-@DocumentoCliente VARCHAR(500),
+@TipoVenta VARCHAR(500),
+@Folio VARCHAR(500),
+@CodigoCliente VARCHAR(500),
 @NombreCliente VARCHAR(500),
 @MontoPago DECIMAL(18,2),
 @MontoCambio DECIMAL(18,2),
@@ -29,8 +29,8 @@ BEGIN
 
 		BEGIN TRANSACTION registro
 
-		INSERT INTO VENTA(IdUsuario, TipoDocumento, NumeroDocumento, DocumentoCliente, NombreCliente, MontoPago, MontoCambio, MontoTotal)
-		VALUES (@IdUsuario, @TipoDocumento, @NumeroDocumento, @DocumentoCliente, @NombreCliente, @MontoPago, @MontoCambio, @MontoTotal)
+		INSERT INTO VENTA(IdUsuario, TipoVenta, CodigoCliente, Folio, NombreCliente, MontoPago, MontoCambio, MontoTotal)
+		VALUES (@IdUsuario, @TipoVenta, @CodigoCliente, @Folio, @NombreCliente, @MontoPago, @MontoCambio, @MontoTotal)
 
 		SET @idventa = SCOPE_IDENTITY()
 
@@ -45,3 +45,36 @@ BEGIN
 		ROLLBACK TRANSACTION registro
 	END CATCH
 END
+
+GO
+
+CREATE PROC usp_EliminarVenta(
+@IdVenta INT,
+@Respuesta BIT OUTPUT,
+@Mensaje VARCHAR(500) OUTPUT
+)
+AS
+BEGIN
+	SET @Respuesta = 0
+	SET @Mensaje = ''
+	DECLARE @pasoreglas BIT = 1
+
+	IF EXISTS (SELECT * FROM DETALLE_VENTA dv
+	INNER JOIN VENTA v ON v.IdVenta = dv.IdVenta
+	WHERE v.IdVenta = @IdVenta
+	)
+	BEGIN 
+		SET @pasoreglas = 1
+		SET @Respuesta = 1
+		DELETE FROM DETALLE_VENTA WHERE IdVenta = @IdVenta
+		DELETE FROM VENTA WHERE IdVenta = @IdVenta
+	END
+
+	IF(@pasoreglas = 0)
+	BEGIN
+	 SET @Respuesta = 0
+		SET @Mensaje = @Mensaje + 'No se puede eliminar porque NO se encuentra relacionado a una VENTA\n'
+	END
+END
+
+GO

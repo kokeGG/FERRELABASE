@@ -32,6 +32,7 @@ namespace CapaPresentacion
                 txttipodocumento.Text = oCotizacion.TipoDocumento;
                 txtusuario.Text = oCotizacion.oUsuario.NombreCompleto;
                 txtfecha.Text = oCotizacion.FechaRegistro;
+                txtid.Text = oCotizacion.IdCotizacion.ToString();
 
                 txtdoccliente.Text = oCotizacion.DocumentoCliente;
                 txtnombrecliente.Text = oCotizacion.NombreCliente;
@@ -59,6 +60,8 @@ namespace CapaPresentacion
             dgvdata.Rows.Clear();
             txtmontototal.Text = "";
             txtmontocambio.Text = "";
+            txtnumerodocumento.Text = "";
+            txtid.Text = "";
         }
 
         private void btndescargar_Click(object sender, EventArgs e)
@@ -133,6 +136,42 @@ namespace CapaPresentacion
                     stream.Close();
                     MessageBox.Show("Documento Generado", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                }
+            }
+        }
+
+        private void btncancelar_Click(object sender, EventArgs e)
+        {
+            if (Convert.ToInt32(txtid.Text) != 0)
+            {
+                var eliminarDialog = MessageBox.Show("¿Desea eliminar la cotización?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                if (eliminarDialog == DialogResult.Yes)
+                {
+                    string mensaje = string.Empty;
+                    Cotizacion objcotizacion = new Cotizacion
+                    {
+                        IdCotizacion = Convert.ToInt32(txtid.Text),
+                    };
+
+                    bool respuesta = new CN_Cotizacion().EliminarCotizacion(objcotizacion, out mensaje);
+                    if (respuesta)
+                    {
+                        MessageBox.Show("Cotización eliminada", "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                        txtfecha.Text = "";
+                        txttipodocumento.Text = "";
+                        txtmontopago.Text = "";
+                        txtusuario.Text = "";
+                        txtdoccliente.Text = "";
+                        txtnombrecliente.Text = "";
+                        dgvdata.Rows.Clear();
+                        txtmontototal.Text = "";
+                        txtmontocambio.Text = "";
+                        txtnumerodocumento.Text = "";
+                        txtid.Text = "";
+                    } else
+                    {
+                        MessageBox.Show(mensaje, "Mensaje", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    }
                 }
             }
         }

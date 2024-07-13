@@ -36,6 +36,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtfechainicio = new System.Windows.Forms.DateTimePicker();
             this.btnbuscarreporte = new FontAwesome.Sharp.IconButton();
+            this.btnfacturar = new FontAwesome.Sharp.IconButton();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.iconButton2 = new FontAwesome.Sharp.IconButton();
             this.textBox2 = new System.Windows.Forms.TextBox();
@@ -45,7 +46,6 @@
             this.btnlimpiarbuscador = new FontAwesome.Sharp.IconButton();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.dgvdata = new System.Windows.Forms.DataGridView();
-            this.btnfacturar = new FontAwesome.Sharp.IconButton();
             this.FechaRegistro = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TipoDocumento = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NumeroDocumento = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -175,6 +175,22 @@
             this.btnbuscarreporte.UseVisualStyleBackColor = true;
             this.btnbuscarreporte.Click += new System.EventHandler(this.btnbuscarreporte_Click);
             // 
+            // btnfacturar
+            // 
+            this.btnfacturar.Dock = System.Windows.Forms.DockStyle.Right;
+            this.btnfacturar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnfacturar.IconChar = FontAwesome.Sharp.IconChar.MoneyBill1Wave;
+            this.btnfacturar.IconColor = System.Drawing.Color.Gold;
+            this.btnfacturar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btnfacturar.IconSize = 30;
+            this.btnfacturar.Location = new System.Drawing.Point(946, 3);
+            this.btnfacturar.Name = "btnfacturar";
+            this.btnfacturar.Size = new System.Drawing.Size(175, 42);
+            this.btnfacturar.TabIndex = 8;
+            this.btnfacturar.Text = "Facturar";
+            this.btnfacturar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btnfacturar.UseVisualStyleBackColor = true;
+            // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.BackColor = System.Drawing.Color.White;
@@ -288,7 +304,6 @@
             // dgvdata
             // 
             this.dgvdata.AllowUserToAddRows = false;
-            this.dgvdata.AllowUserToDeleteRows = false;
             this.dgvdata.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvdata.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.FechaRegistro,
@@ -307,34 +322,16 @@
             this.dgvdata.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvdata.Location = new System.Drawing.Point(3, 3);
             this.dgvdata.Name = "dgvdata";
-            this.dgvdata.ReadOnly = true;
             this.dgvdata.RowHeadersWidth = 51;
             this.dgvdata.RowTemplate.Height = 24;
             this.dgvdata.Size = new System.Drawing.Size(1318, 539);
             this.dgvdata.TabIndex = 0;
-            // 
-            // btnfacturar
-            // 
-            this.btnfacturar.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnfacturar.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnfacturar.IconChar = FontAwesome.Sharp.IconChar.MoneyBill1Wave;
-            this.btnfacturar.IconColor = System.Drawing.Color.Gold;
-            this.btnfacturar.IconFont = FontAwesome.Sharp.IconFont.Auto;
-            this.btnfacturar.IconSize = 30;
-            this.btnfacturar.Location = new System.Drawing.Point(1001, 3);
-            this.btnfacturar.Name = "btnfacturar";
-            this.btnfacturar.Size = new System.Drawing.Size(120, 42);
-            this.btnfacturar.TabIndex = 8;
-            this.btnfacturar.Text = "Facturar";
-            this.btnfacturar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-            this.btnfacturar.UseVisualStyleBackColor = true;
             // 
             // FechaRegistro
             // 
             this.FechaRegistro.HeaderText = "Fecha Registro";
             this.FechaRegistro.MinimumWidth = 6;
             this.FechaRegistro.Name = "FechaRegistro";
-            this.FechaRegistro.ReadOnly = true;
             this.FechaRegistro.Width = 125;
             // 
             // TipoDocumento
@@ -342,7 +339,6 @@
             this.TipoDocumento.HeaderText = "Tipo Documento";
             this.TipoDocumento.MinimumWidth = 6;
             this.TipoDocumento.Name = "TipoDocumento";
-            this.TipoDocumento.ReadOnly = true;
             this.TipoDocumento.Width = 125;
             // 
             // NumeroDocumento
@@ -350,7 +346,6 @@
             this.NumeroDocumento.HeaderText = "Numero Documento";
             this.NumeroDocumento.MinimumWidth = 6;
             this.NumeroDocumento.Name = "NumeroDocumento";
-            this.NumeroDocumento.ReadOnly = true;
             this.NumeroDocumento.Width = 125;
             // 
             // MontoTotal
@@ -358,7 +353,6 @@
             this.MontoTotal.HeaderText = "Monto Total";
             this.MontoTotal.MinimumWidth = 6;
             this.MontoTotal.Name = "MontoTotal";
-            this.MontoTotal.ReadOnly = true;
             this.MontoTotal.Width = 125;
             // 
             // UsuarioRegistro
@@ -366,7 +360,6 @@
             this.UsuarioRegistro.HeaderText = "Usuario Registro";
             this.UsuarioRegistro.MinimumWidth = 6;
             this.UsuarioRegistro.Name = "UsuarioRegistro";
-            this.UsuarioRegistro.ReadOnly = true;
             this.UsuarioRegistro.Width = 125;
             // 
             // DocumentoCliente
@@ -374,7 +367,6 @@
             this.DocumentoCliente.HeaderText = "Documento Cliente";
             this.DocumentoCliente.MinimumWidth = 6;
             this.DocumentoCliente.Name = "DocumentoCliente";
-            this.DocumentoCliente.ReadOnly = true;
             this.DocumentoCliente.Width = 125;
             // 
             // NombreCliente
@@ -382,7 +374,6 @@
             this.NombreCliente.HeaderText = "Nombre Cliente";
             this.NombreCliente.MinimumWidth = 6;
             this.NombreCliente.Name = "NombreCliente";
-            this.NombreCliente.ReadOnly = true;
             this.NombreCliente.Width = 125;
             // 
             // CodigoProducto
@@ -390,7 +381,6 @@
             this.CodigoProducto.HeaderText = "Codigo Producto";
             this.CodigoProducto.MinimumWidth = 6;
             this.CodigoProducto.Name = "CodigoProducto";
-            this.CodigoProducto.ReadOnly = true;
             this.CodigoProducto.Width = 125;
             // 
             // NombreProducto
@@ -398,7 +388,6 @@
             this.NombreProducto.HeaderText = "Nombre Producto";
             this.NombreProducto.MinimumWidth = 6;
             this.NombreProducto.Name = "NombreProducto";
-            this.NombreProducto.ReadOnly = true;
             this.NombreProducto.Width = 125;
             // 
             // Categoria
@@ -406,7 +395,6 @@
             this.Categoria.HeaderText = "Categoria";
             this.Categoria.MinimumWidth = 6;
             this.Categoria.Name = "Categoria";
-            this.Categoria.ReadOnly = true;
             this.Categoria.Width = 125;
             // 
             // PrecioVenta
@@ -414,7 +402,6 @@
             this.PrecioVenta.HeaderText = "Precio Venta";
             this.PrecioVenta.MinimumWidth = 6;
             this.PrecioVenta.Name = "PrecioVenta";
-            this.PrecioVenta.ReadOnly = true;
             this.PrecioVenta.Width = 125;
             // 
             // Cantidad
@@ -422,7 +409,6 @@
             this.Cantidad.HeaderText = "Cantidad";
             this.Cantidad.MinimumWidth = 6;
             this.Cantidad.Name = "Cantidad";
-            this.Cantidad.ReadOnly = true;
             this.Cantidad.Width = 125;
             // 
             // SubTotal
@@ -430,7 +416,6 @@
             this.SubTotal.HeaderText = "Sub Total";
             this.SubTotal.MinimumWidth = 6;
             this.SubTotal.Name = "SubTotal";
-            this.SubTotal.ReadOnly = true;
             this.SubTotal.Width = 125;
             // 
             // frmReporteVentas

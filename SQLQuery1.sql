@@ -35,14 +35,21 @@ SELECT * FROM PROVEEDOR;
 --añadir campo de razón social
 CREATE TABLE CLIENTE(
 	IdCliente INT PRIMARY KEY IDENTITY(1,1),
-	Documento VARCHAR(50),
-	RazonSocial VARCHAR(50),
+	Codigo VARCHAR(50),
 	RFC VARCHAR(50),
 	NombreCompleto VARCHAR(50),
+	Calle VARCHAR(200),
+	NoExt VARCHAR(50),
+	NoInt VARCHAR(50),
+	Colonia VARCHAR(200),
+	CodigoPostal VARCHAR(6),
+	Municipio VARCHAR(100),
+	Poblacion VARCHAR(100),
+	Edo VARCHAR(100),
 	Correo VARCHAR(50),
-	Telefono VARCHAR(50),
 	Estado bit,
-	FechaRegistro DATETIME DEFAULT GETDATE()
+	FechaRegistro DATETIME DEFAULT GETDATE(),
+	Regimen VARCHAR(5)
 );
 ALTER TABLE CLIENTE
 ADD DIRECCION VARCHAR(100) NULL;
@@ -66,7 +73,7 @@ SELECT * FROM CLIENTE;
 
 CREATE TABLE USUARIO(
 	IdUsuario INT PRIMARY KEY IDENTITY(1,1),
-	Documento VARCHAR(50),
+	Codigo VARCHAR(50),
 	NombreCompleto VARCHAR(50),
 	Correo VARCHAR(50),
 	Clave VARCHAR(50),
@@ -81,7 +88,7 @@ CREATE TABLE COMPRA(
 	IdUsuario INT REFERENCES USUARIO(IdUsuario),
 	IdProveedor INT REFERENCES PROVEEDOR(IdProveedor),
 	TipoDocumento VARCHAR(50),
-	NumeroDocumento VARCHAR(50),
+	Codigo VARCHAR(50),
 	MontoTotal DECIMAL(10,2),
 	FechaRegistro DATETIME DEFAULT GETDATE()
 );
@@ -100,10 +107,12 @@ CREATE TABLE PRODUCTO(
 	Descripcion VARCHAR(100),
 	IdCategoria INT REFERENCES CATEGORIA(IdCategoria),
 	Stock INT NOT NULL DEFAULT 0,
-	PrecioCompra DECIMAL(10,2) DEFAULT 0,
-	PrecioVenta DECIMAL(10,2) DEFAULT 0,
+	Precio DECIMAL(10,2) DEFAULT 0,
 	Estado BIT,
-	FechaRegistro DATETIME DEFAULT GETDATE()
+	FechaRegistro DATETIME DEFAULT GETDATE(),
+	ClaveSat VARCHAR(50),
+	UnidadSat VARCHAR(50),
+	UltimoPrecio DATETIME DEFAULT GETDATE()
 );
 
 CREATE TABLE DETALLE_COMPRA(
@@ -120,32 +129,29 @@ CREATE TABLE DETALLE_COMPRA(
 CREATE TABLE VENTA(
 	IdVenta INT PRIMARY KEY IDENTITY(1,1),
 	IdUsuario INT REFERENCES USUARIO(IdUsuario),
-	TipoDocumento VARCHAR(50),
-	NumeroDocumento VARCHAR(50),
-	DocumentoCliente VARCHAR(50),
+	TipoVenta VARCHAR(50),
+	Folio VARCHAR(50),
+	CodigoCliente VARCHAR(50),
 	NombreCliente VARCHAR(100),
 	MontoPago DECIMAL(10,2),
 	MontoCambio DECIMAL(10,2),
 	MontoTotal DECIMAL(10,2),
 	FechaRegistro DATETIME DEFAULT GETDATE()
 );
+
 
 CREATE TABLE COTIZACION(
 	IdCotizacion INT PRIMARY KEY IDENTITY(1,1),
 	IdUsuario INT REFERENCES USUARIO(IdUsuario),
-	TipoDocumento VARCHAR(50),
-	NumeroDocumento VARCHAR(50),
+	Folio VARCHAR(50),
 	RFC VARCHAR(50),
-	DocumentoCliente VARCHAR(50),
+	CodigoCliente VARCHAR(50),
 	NombreCliente VARCHAR(100),
 	MontoPago DECIMAL(10,2),
 	MontoCambio DECIMAL(10,2),
 	MontoTotal DECIMAL(10,2),
 	FechaRegistro DATETIME DEFAULT GETDATE()
 );
-
-ALTER TABLE COTIZACION
-ADD RFC VARCHAR(50) NULL;
 
 CREATE TABLE DETALLE_VENTA(
 	IdDetalleVenta INT PRIMARY KEY IDENTITY(1,1),
@@ -157,7 +163,6 @@ CREATE TABLE DETALLE_VENTA(
 	FechaRegistro DATETIME DEFAULT GETDATE()
 );
 
-DROP TABLE DETALLE_COTIZACION;
 
 CREATE TABLE DETALLE_COTIZACION(
 	IdDetalleCotizacion INT PRIMARY KEY IDENTITY(1,1),
@@ -171,9 +176,9 @@ CREATE TABLE DETALLE_COTIZACION(
 
 SELECT * FROM USUARIO;
 SELECT * FROM ROL;
-SELECT IdUsuario, Documento, NombreCompleto, Correo, Clave, Estado FROM USUARIO;
+SELECT IdUsuario, Codigo, NombreCompleto, Correo, Clave, Estado FROM USUARIO;
 
-INSERT INTO USUARIO(Documento, NombreCompleto, Correo, Clave, Telefono, IdRol, Estado)
+INSERT INTO USUARIO(Codigo, NombreCompleto, Correo, Clave, Telefono, IdRol, Estado)
 VALUES (
 	'101010',
 	'ADMIN',
@@ -216,14 +221,14 @@ INNER JOIN ROL r ON r.IdRol = p.IdRol
 INNER JOIN USUARIO u ON u.IdRol = r.IdRol 
 WHERE u.IdUsuario = 1
 
-INSERT INTO USUARIO(Documento, NombreCompleto, Correo, Clave, IdRol, Estado)
+INSERT INTO USUARIO(Codigo, NombreCompleto, Correo, Clave, IdRol, Estado)
 VALUES 
 ('20', 'EMPLEADO', '@GMAIL.COM', '456', 2, 1)
 
 SELECT * FROM USUARIO;
 
 CREATE PROC SP_REGISTRARUSUARIO(
-@Documento VARCHAR(50),
+@Codigo VARCHAR(50),
 @NombreCompleto VARCHAR(100),
 @Correo VARCHAR(100),
 @Clave VARCHAR(100),
@@ -237,10 +242,10 @@ BEGIN
 	SET @IdUsuarioResultado = 0
 	SET @Mensaje = ''
 
-	IF NOT EXISTS(SELECT * FROM USUARIO WHERE Documento = @documento)
+	IF NOT EXISTS(SELECT * FROM USUARIO WHERE Codigo = @codigo)
 	BEGIN
-		INSERT INTO USUARIO(Documento, NombreCompleto, Correo, Clave, IdRol, Estado) VALUES
-		(@Documento, @NombreCompleto, @Correo, @Clave, @IdRol, @Estado)
+		INSERT INTO USUARIO(Codigo, NombreCompleto, Correo, Clave, IdRol, Estado) VALUES
+		(@Codigo, @NombreCompleto, @Correo, @Clave, @IdRol, @Estado)
 
 		SET @IdUsuarioResultado = SCOPE_IDENTITY()
 	END
@@ -258,7 +263,7 @@ SELECT * FROM USUARIO;
 /*-------------------------------------------------------------------------------*/
 CREATE PROC SP_EDITARUSUARIO(
 @IdUsuario int,
-@Documento VARCHAR(50),
+@Codigo VARCHAR(50),
 @NombreCompleto VARCHAR(100),
 @Correo VARCHAR(100),
 @Clave VARCHAR(100),
@@ -272,10 +277,10 @@ BEGIN
 	SET @Respuesta = 0
 	SET @Mensaje = ''
 
-	IF NOT EXISTS(SELECT * FROM USUARIO WHERE Documento = @documento AND IdUsuario != @IdUsuario)
+	IF NOT EXISTS(SELECT * FROM USUARIO WHERE Codigo = @codigo AND IdUsuario != @IdUsuario)
 	BEGIN
 		UPDATE USUARIO SET
-		Documento = @Documento, 
+		Codigo = @Codigo, 
 		NombreCompleto = @NombreCompleto, 
 		Correo = @Correo, 
 		Clave = @Clave, 

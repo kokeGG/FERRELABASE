@@ -66,6 +66,8 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.txtmontopago = new System.Windows.Forms.TextBox();
+            this.btncancelar = new FontAwesome.Sharp.IconButton();
+            this.txtid = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -123,6 +125,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label3, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnbuscar, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.txtbusqueda, 2, 0);
+            this.tableLayoutPanel2.Controls.Add(this.txtid, 5, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 35);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -461,9 +464,9 @@
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
-            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 10F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 8.836858F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 7.854985F));
+            this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 13.21752F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 15F));
             this.tableLayoutPanel8.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 5F));
             this.tableLayoutPanel8.Controls.Add(this.btndescargar, 8, 0);
@@ -473,11 +476,12 @@
             this.tableLayoutPanel8.Controls.Add(this.label11, 5, 0);
             this.tableLayoutPanel8.Controls.Add(this.label10, 3, 0);
             this.tableLayoutPanel8.Controls.Add(this.txtmontopago, 4, 0);
+            this.tableLayoutPanel8.Controls.Add(this.btncancelar, 7, 0);
             this.tableLayoutPanel8.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel8.Location = new System.Drawing.Point(0, 608);
             this.tableLayoutPanel8.Name = "tableLayoutPanel8";
             this.tableLayoutPanel8.RowCount = 1;
-            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 82F));
+            this.tableLayoutPanel8.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 85F));
             this.tableLayoutPanel8.Size = new System.Drawing.Size(1324, 85);
             this.tableLayoutPanel8.TabIndex = 46;
             // 
@@ -509,17 +513,21 @@
             // 
             // txtmontocambio
             // 
-            this.txtmontocambio.Location = new System.Drawing.Point(795, 3);
+            this.txtmontocambio.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtmontocambio.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtmontocambio.Location = new System.Drawing.Point(780, 3);
             this.txtmontocambio.Name = "txtmontocambio";
-            this.txtmontocambio.Size = new System.Drawing.Size(50, 22);
+            this.txtmontocambio.Size = new System.Drawing.Size(98, 30);
             this.txtmontocambio.TabIndex = 38;
             this.txtmontocambio.Text = "0";
             // 
             // txtmontototal
             // 
+            this.txtmontototal.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtmontototal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtmontototal.Location = new System.Drawing.Point(267, 3);
             this.txtmontototal.Name = "txtmontototal";
-            this.txtmontototal.Size = new System.Drawing.Size(50, 22);
+            this.txtmontototal.Size = new System.Drawing.Size(126, 30);
             this.txtmontototal.TabIndex = 34;
             this.txtmontototal.Text = "0";
             // 
@@ -548,11 +556,35 @@
             // 
             // txtmontopago
             // 
+            this.txtmontopago.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtmontopago.Location = new System.Drawing.Point(531, 3);
             this.txtmontopago.Name = "txtmontopago";
-            this.txtmontopago.Size = new System.Drawing.Size(108, 22);
+            this.txtmontopago.Size = new System.Drawing.Size(108, 30);
             this.txtmontopago.TabIndex = 36;
             this.txtmontopago.Text = "0";
+            // 
+            // btncancelar
+            // 
+            this.btncancelar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btncancelar.IconChar = FontAwesome.Sharp.IconChar.Trash;
+            this.btncancelar.IconColor = System.Drawing.Color.Red;
+            this.btncancelar.IconFont = FontAwesome.Sharp.IconFont.Auto;
+            this.btncancelar.IconSize = 20;
+            this.btncancelar.Location = new System.Drawing.Point(884, 3);
+            this.btncancelar.Name = "btncancelar";
+            this.btncancelar.Size = new System.Drawing.Size(169, 34);
+            this.btncancelar.TabIndex = 40;
+            this.btncancelar.Text = "Eliminar Cotización";
+            this.btncancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+            this.btncancelar.UseVisualStyleBackColor = true;
+            this.btncancelar.Click += new System.EventHandler(this.btncancelar_Click);
+            // 
+            // txtid
+            // 
+            this.txtid.Location = new System.Drawing.Point(1160, 3);
+            this.txtid.Name = "txtid";
+            this.txtid.Size = new System.Drawing.Size(100, 22);
+            this.txtid.TabIndex = 32;
             // 
             // frmDetalleCotizacion
             // 
@@ -629,5 +661,7 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox txtmontopago;
+        private FontAwesome.Sharp.IconButton btncancelar;
+        private System.Windows.Forms.TextBox txtid;
     }
 }
