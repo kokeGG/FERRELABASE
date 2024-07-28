@@ -73,7 +73,6 @@ namespace CapaPresentacion.Modales
                     Precio = Convert.ToDecimal(dgvdata.Rows[iRow].Cells["Precio"].Value.ToString()),
                     UnidadSat = dgvdata.Rows[iRow].Cells["UnidadSat"].Value.ToString(),
                     ClaveSat = dgvdata.Rows[iRow].Cells["ClaveSat"].Value.ToString(),
-                    UltimoPrecio = Convert.ToDateTime(dgvdata.Rows[iRow].Cells["UltimoPrecio"].Value.ToString())
                 };
                 this.DialogResult = DialogResult.OK;
                 this.Close();

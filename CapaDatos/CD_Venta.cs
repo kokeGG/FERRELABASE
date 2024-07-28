@@ -21,7 +21,34 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT CAST(CAST(MAX(NumeroDocumento) AS INT) + 1 AS VARCHAR) FROM VENTA");
+                    query.AppendLine("SELECT CAST(COALESCE(CAST(MAX(Folio) AS INT), 0) + 1 AS VARCHAR) FROM VENTA WHERE TipoVenta = 'Venta General'");
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.CommandType = CommandType.Text;
+
+                    oconexion.Open();
+
+                    idcorrelativo = Convert.ToInt32(cmd.ExecuteScalar());
+
+                }
+                catch (Exception ex)
+                {
+                    idcorrelativo = 0;
+                }
+            }
+            return idcorrelativo;
+        }
+
+        public int ObtenerCorrelativoFactura()
+        {
+            int idcorrelativo = 0;
+
+            using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+            {
+
+                try
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("SELECT CAST(COALESCE(CAST(MAX(Folio) AS INT), 0) + 1 AS VARCHAR) FROM FolioFactura");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = CommandType.Text;
 
@@ -106,9 +133,9 @@ namespace CapaDatos
                 {
                     SqlCommand cmd = new SqlCommand("usp_RegistrarVenta", oconexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
-                    cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
-                    cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
-                    cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
+                    cmd.Parameters.AddWithValue("TipoVenta", obj.TipoDocumento);
+                    cmd.Parameters.AddWithValue("Folio", obj.NumeroDocumento);
+                    cmd.Parameters.AddWithValue("CodigoCliente", obj.DocumentoCliente);
                     cmd.Parameters.AddWithValue("NombreCliente", obj.NombreCliente);
                     cmd.Parameters.AddWithValue("MontoPago", obj.MontoPago);
                     cmd.Parameters.AddWithValue("MontoCambio", obj.MontoCambio);
@@ -135,6 +162,43 @@ namespace CapaDatos
             return Respuesta;
         }
 
+        public bool RegistrarFolioFactura(Venta obj, DataTable DetalleVenta, out string Mensaje)
+        {
+            bool Respuesta = false;
+            Mensaje = string.Empty;
+            try
+            {
+                using (SqlConnection oconexion = new SqlConnection(Conexion.cadena))
+                {
+                    StringBuilder query = new StringBuilder();
+                    query.AppendLine("INSERT INTO FolioFactura(Folio) VALUES(@NumeroDocumento)");
+                    SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
+                    cmd.CommandType = CommandType.Text;
+
+                    // Añadir el parámetro
+                    cmd.Parameters.AddWithValue("@NumeroDocumento", obj.NumeroDocumento);
+
+                    oconexion.Open();
+
+                    cmd.ExecuteNonQuery();
+
+                    // Si necesitas obtener algún valor de salida, asegúrate de que los parámetros estén configurados correctamente
+                    // Respuesta = Convert.ToBoolean(cmd.Parameters["Resultado"].Value);
+                    // Mensaje = cmd.Parameters["Mensaje"].Value.ToString();
+
+                    // Si no hay parámetros de salida, simplemente puedes asumir que la ejecución fue exitosa si no hubo excepciones
+                    Respuesta = true;
+                    Mensaje = "Folio registrado exitosamente.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Respuesta = false;
+                Mensaje = ex.Message;
+            }
+
+            return Respuesta;
+        }
 
         public Venta ObtenerVenta(string numero)
         {
@@ -149,13 +213,13 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
 
                     query.AppendLine("select v.IdVenta,u.NombreCompleto,");
-                    query.AppendLine("v.DocumentoCliente,v.NombreCliente,");
-                    query.AppendLine("v.TipoDocumento,v.NumeroDocumento,");
+                    query.AppendLine("v.CodigoCliente,v.NombreCliente,");
+                    query.AppendLine("v.TipoVenta,v.Folio,");
                     query.AppendLine("v.MontoPago,v.MontoCambio,v.MontoTotal,");
                     query.AppendLine("convert(char(10),v.FechaRegistro,103)[FechaRegistro]");
                     query.AppendLine("from VENTA v");
                     query.AppendLine("inner join USUARIO u on u.IdUsuario = v.IdUsuario");
-                    query.AppendLine("where v.NumeroDocumento = @numero");
+                    query.AppendLine("where v.Folio = @numero");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@numero", numero);
@@ -170,10 +234,10 @@ namespace CapaDatos
                             {
                                 IdVenta = int.Parse(dr["IdVenta"].ToString()),
                                 oUsuario = new Usuario() { NombreCompleto = dr["NombreCompleto"].ToString() },
-                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                DocumentoCliente = dr["CodigoCliente"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
-                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                TipoDocumento = dr["TipoVenta"].ToString(),
+                                NumeroDocumento = dr["Folio"].ToString(),
                                 MontoPago = Convert.ToDecimal(dr["MontoPago"].ToString()),
                                 MontoCambio = Convert.ToDecimal(dr["MontoCambio"].ToString()),
                                 MontoTotal = Convert.ToDecimal(dr["MontoTotal"].ToString()),

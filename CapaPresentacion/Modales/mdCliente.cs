@@ -49,11 +49,11 @@ namespace CapaPresentacion.Modales
             {
                 _Cliente = new Cliente()
                 {
-                    Codigo = dgvdata.Rows[iRow].Cells["Codigo"].Value.ToString(),
+                    Codigo = dgvdata.Rows[iRow].Cells["Documento"].Value.ToString(),
                     NombreCompleto = dgvdata.Rows[iRow].Cells["NombreCompleto"].Value.ToString(),
                     RFC = dgvdata.Rows[iRow].Cells["RFC"].Value.ToString(),
-                    CodigoPostal = dgvdata.Rows[iRow].Cells["CodigoPostal"].Value.ToString(),
-                    Regimen = dgvdata.Rows[iRow].Cells["Regimen"].Value.ToString(),
+                    CodigoPostal = dgvdata.Rows[iRow].Cells["CP"].Value.ToString(),
+                    Regimen = dgvdata.Rows[iRow].Cells["RegimenFiscal"].Value.ToString(),
 
                 };
                 this.DialogResult = DialogResult.OK;

@@ -35,6 +35,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.btnbuscar = new FontAwesome.Sharp.IconButton();
             this.txtbusqueda = new System.Windows.Forms.TextBox();
+            this.txtid = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -67,7 +68,6 @@
             this.label10 = new System.Windows.Forms.Label();
             this.txtmontopago = new System.Windows.Forms.TextBox();
             this.btncancelar = new FontAwesome.Sharp.IconButton();
-            this.txtid = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -199,6 +199,13 @@
             this.txtbusqueda.Name = "txtbusqueda";
             this.txtbusqueda.Size = new System.Drawing.Size(325, 22);
             this.txtbusqueda.TabIndex = 29;
+            // 
+            // txtid
+            // 
+            this.txtid.Location = new System.Drawing.Point(1160, 3);
+            this.txtid.Name = "txtid";
+            this.txtid.Size = new System.Drawing.Size(100, 22);
+            this.txtid.TabIndex = 32;
             // 
             // tableLayoutPanel3
             // 
@@ -578,13 +585,6 @@
             this.btncancelar.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
             this.btncancelar.UseVisualStyleBackColor = true;
             this.btncancelar.Click += new System.EventHandler(this.btncancelar_Click);
-            // 
-            // txtid
-            // 
-            this.txtid.Location = new System.Drawing.Point(1160, 3);
-            this.txtid.Name = "txtid";
-            this.txtid.Size = new System.Drawing.Size(100, 22);
-            this.txtid.TabIndex = 32;
             // 
             // frmDetalleCotizacion
             // 

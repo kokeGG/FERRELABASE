@@ -42,8 +42,7 @@
             this.Nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Categoria = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Stock = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PrecioCompra = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.PrecioVenta = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Precio = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.UnidadSat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ClaveSat = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvdata)).BeginInit();
@@ -79,12 +78,11 @@
             this.Nombre,
             this.Categoria,
             this.Stock,
-            this.PrecioCompra,
-            this.PrecioVenta,
+            this.Precio,
             this.UnidadSat,
             this.ClaveSat});
             this.dgvdata.Location = new System.Drawing.Point(16, 78);
-            this.dgvdata.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.dgvdata.Margin = new System.Windows.Forms.Padding(4);
             this.dgvdata.MultiSelect = false;
             this.dgvdata.Name = "dgvdata";
             this.dgvdata.ReadOnly = true;
@@ -109,7 +107,7 @@
             this.clean.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.clean.IconSize = 16;
             this.clean.Location = new System.Drawing.Point(628, 42);
-            this.clean.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.clean.Margin = new System.Windows.Forms.Padding(4);
             this.clean.Name = "clean";
             this.clean.Size = new System.Drawing.Size(71, 28);
             this.clean.TabIndex = 57;
@@ -128,7 +126,7 @@
             this.btnbuscar.IconFont = FontAwesome.Sharp.IconFont.Auto;
             this.btnbuscar.IconSize = 16;
             this.btnbuscar.Location = new System.Drawing.Point(549, 42);
-            this.btnbuscar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnbuscar.Margin = new System.Windows.Forms.Padding(4);
             this.btnbuscar.Name = "btnbuscar";
             this.btnbuscar.Size = new System.Drawing.Size(71, 28);
             this.btnbuscar.TabIndex = 56;
@@ -138,7 +136,7 @@
             // txtbusqueda
             // 
             this.txtbusqueda.Location = new System.Drawing.Point(308, 44);
-            this.txtbusqueda.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txtbusqueda.Margin = new System.Windows.Forms.Padding(4);
             this.txtbusqueda.Name = "txtbusqueda";
             this.txtbusqueda.Size = new System.Drawing.Size(227, 22);
             this.txtbusqueda.TabIndex = 55;
@@ -147,7 +145,7 @@
             // 
             this.cbobusqueda.FormattingEnabled = true;
             this.cbobusqueda.Location = new System.Drawing.Point(139, 44);
-            this.cbobusqueda.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cbobusqueda.Margin = new System.Windows.Forms.Padding(4);
             this.cbobusqueda.Name = "cbobusqueda";
             this.cbobusqueda.Size = new System.Drawing.Size(160, 24);
             this.cbobusqueda.TabIndex = 54;
@@ -205,23 +203,14 @@
             this.Stock.Visible = false;
             this.Stock.Width = 125;
             // 
-            // PrecioCompra
+            // Precio
             // 
-            this.PrecioCompra.HeaderText = "Precio Compra";
-            this.PrecioCompra.MinimumWidth = 6;
-            this.PrecioCompra.Name = "PrecioCompra";
-            this.PrecioCompra.ReadOnly = true;
-            this.PrecioCompra.Visible = false;
-            this.PrecioCompra.Width = 125;
-            // 
-            // PrecioVenta
-            // 
-            this.PrecioVenta.HeaderText = "PrecioVenta";
-            this.PrecioVenta.MinimumWidth = 6;
-            this.PrecioVenta.Name = "PrecioVenta";
-            this.PrecioVenta.ReadOnly = true;
-            this.PrecioVenta.Visible = false;
-            this.PrecioVenta.Width = 125;
+            this.Precio.HeaderText = "Precio";
+            this.Precio.MinimumWidth = 6;
+            this.Precio.Name = "Precio";
+            this.Precio.ReadOnly = true;
+            this.Precio.Visible = false;
+            this.Precio.Width = 125;
             // 
             // UnidadSat
             // 
@@ -253,7 +242,7 @@
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.dgvdata);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "mdProducto";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "mdProducto";
@@ -278,8 +267,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn Categoria;
         private System.Windows.Forms.DataGridViewTextBoxColumn Stock;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioCompra;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PrecioVenta;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Precio;
         private System.Windows.Forms.DataGridViewTextBoxColumn UnidadSat;
         private System.Windows.Forms.DataGridViewTextBoxColumn ClaveSat;
     }

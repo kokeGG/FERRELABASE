@@ -82,11 +82,11 @@ namespace CapaDatos
                             lista.Add(new ReporteVenta()
                             {
                                 FechaRegistro = dr["FechaRegistro"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
-                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                TipoDocumento = dr["TipoVenta"].ToString(),
+                                NumeroDocumento = dr["Folio"].ToString(),
                                 MontoTotal = dr["MontoTotal"].ToString(),
                                 UsuarioRegistro = dr["UsuarioRegistro"].ToString(),
-                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                DocumentoCliente = dr["CodigoCliente"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
                                 CodigoProducto = dr["CodigoProducto"].ToString(),
                                 NombreProducto = dr["NombreProducto"].ToString(),

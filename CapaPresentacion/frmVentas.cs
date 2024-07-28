@@ -467,9 +467,18 @@ namespace CapaPresentacion
                 });
             }
 
+            string numeroDocumento;
 
-            int idcorrelativo = new CN_Venta().ObtenerCorrelativo();
-            string numeroDocumento = string.Format("{0:00000}", idcorrelativo);
+            if(cbotipodocumento.Text == "Factura")
+            {
+                int idcorrelativo = new CN_Venta().ObtenerCorrelativoFactura();
+                numeroDocumento = string.Format("{0:00000}", idcorrelativo);
+
+            } else
+            {
+                int idcorrelativo = new CN_Venta().ObtenerCorrelativo();
+                numeroDocumento = string.Format("{0:00000}", idcorrelativo);
+            }
             calcularcambio();
 
             Venta oVenta = new Venta()
@@ -501,7 +510,7 @@ namespace CapaPresentacion
                         return;
                     }
 
-
+                    bool respuestaAddFolio = new CN_Venta().RegistrarFolioFactura(oVenta, detalle_venta, out mensaje);
                     //Obtener numero de certificado ............................
 
                     //string pathCer = $@"C:\Users\{currentUser}\Downloads\Certificados_de_Prueba\Certificados_de_Prueba\RFC-PAC-SC (2019)\RFC para la autenticación de Certificación\CSD_Pruebas_CFDI_SPR190613I52\CSD_Pruebas_CFDI_SPR190613I52.cer";
@@ -918,13 +927,21 @@ namespace CapaPresentacion
                         g.DrawString("con público en general.", regularFont, Brushes.Black, startX, startY);
                     };
 
-                    try
+                    PrintDialog printDialog = new PrintDialog();
+                    printDialog.Document = pd;
+
+                    if (printDialog.ShowDialog() == DialogResult.OK)
                     {
-                        pd.Print();
-                    } catch (Exception err)
-                    {
-                        MessageBox.Show("Error al imprimir: " + err);
+
+                        try
+                        {
+                            pd.Print();
+                        } catch (Exception err)
+                        {
+                            MessageBox.Show("Error al imprimir: " + err);
+                        }
                     }
+
                 }
 
                 txtdocumentocliente.Text = "";
@@ -1270,19 +1287,26 @@ namespace CapaPresentacion
                         g.DrawString("      * PARA AGILIZAR SU COMPRA *.", regularFont, Brushes.Black, startX, startY);
                     };
 
-                    try
+                    PrintDialog printDialog = new PrintDialog();
+                    printDialog.Document = pd;
+
+                    if (printDialog.ShowDialog() == DialogResult.OK)
                     {
-                        pd.Print();
-                    }
-                    catch (Exception err)
-                    {
-                        MessageBox.Show("Error al imprimir: " + err);
+
+                        try
+                        {
+                            pd.Print();
+                        }
+                        catch (Exception err)
+                        {
+                            MessageBox.Show("Error al imprimir: " + err);
+                        }
                     }
                 }
 
 
 
-                var imprimirA4 = MessageBox.Show("¿Imprimir cotizacion en tamaño carta?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                var imprimirA4 = MessageBox.Show("¿Generar cotizacion en tamaño carta?", "Mensaje", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                 if (imprimirA4 == DialogResult.Yes)
                 {

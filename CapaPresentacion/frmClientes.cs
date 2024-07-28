@@ -158,19 +158,19 @@ namespace CapaPresentacion
                     row.Cells["Id"].Value = txtid.Text;
                     row.Cells["Codigo"].Value = txtcodigo.Text;
                     row.Cells["NombreCompleto"].Value = txtnombrecompleto.Text;
-                    row.Cells["RazonSocial"].Value = txtrfc.Text;
-                    row.Cells["RFC"].Value = txtcalle.Text;
+                    row.Cells["RFC"].Value = txtrfc.Text;
+                    row.Cells["Calle"].Value = txtcalle.Text;
                     row.Cells["Correo"].Value = txtcorreo.Text;
-                    row.Cells["Telefono"].Value = txtnoext.Text;
+                    row.Cells["NoExt"].Value = txtnoext.Text;
                     row.Cells["EstadoValor"].Value = ((OpcionCombo)cboestado.SelectedItem).Valor.ToString();
                     row.Cells["Estado"].Value = ((OpcionCombo)cboestado.SelectedItem).Texto.ToString();
-                    row.Cells["CP"].Value = txtnoint.Text;
-                    row.Cells["DIRECCION"].Value = txtmunicipio.Text;
+                    row.Cells["NoInt"].Value = txtnoint.Text;
+                    row.Cells["Municipio"].Value = txtmunicipio.Text;
                     row.Cells["Colonia"].Value = txtcolonia.Text;
-                    row.Cells["Numero"].Value = txtcp.Text;
-                    row.Cells["Ciudad"].Value = txtpoblacion.Text;
+                    row.Cells["CP"].Value = txtcp.Text;
+                    row.Cells["Poblacion"].Value = txtpoblacion.Text;
                     row.Cells["Edo"].Value = txtestado.Text;
-                    row.Cells["RegimenFiscal"].Value = regimenSeleccionado.ToString();
+                    row.Cells["Regimen"].Value = regimenSeleccionado.ToString();
                     Limpiar();
                 }
                 else

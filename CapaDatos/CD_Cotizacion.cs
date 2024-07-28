@@ -21,7 +21,7 @@ namespace CapaDatos
                 try
                 {
                     StringBuilder query = new StringBuilder();
-                    query.AppendLine("SELECT CAST(CAST(MAX(NumeroDocumento) AS INT) + 1 AS VARCHAR) FROM COTIZACION");
+                    query.AppendLine("SELECT CAST(COALESCE(CAST(MAX(Folio) AS INT), 0) + 1 AS VARCHAR) FROM COTIZACION");
                     SqlCommand cmd = new SqlCommand(query.ToString(), oconexion);
                     cmd.CommandType = CommandType.Text;
 
@@ -48,10 +48,10 @@ namespace CapaDatos
                 {
                     SqlCommand cmd = new SqlCommand("usp_RegistrarCotizacion", oconexion);
                     cmd.Parameters.AddWithValue("IdUsuario", obj.oUsuario.IdUsuario);
-                    cmd.Parameters.AddWithValue("TipoDocumento", obj.TipoDocumento);
-                    cmd.Parameters.AddWithValue("NumeroDocumento", obj.NumeroDocumento);
+                    
+                    cmd.Parameters.AddWithValue("Folio", obj.NumeroDocumento);
                     cmd.Parameters.AddWithValue("RFC", obj.RFC);
-                    cmd.Parameters.AddWithValue("DocumentoCliente", obj.DocumentoCliente);
+                    cmd.Parameters.AddWithValue("CodigoCliente", obj.DocumentoCliente);
                     cmd.Parameters.AddWithValue("NombreCliente", obj.NombreCliente);
                     cmd.Parameters.AddWithValue("MontoPago", obj.MontoPago);
                     cmd.Parameters.AddWithValue("MontoCambio", obj.MontoCambio);
@@ -91,13 +91,13 @@ namespace CapaDatos
                     StringBuilder query = new StringBuilder();
 
                     query.AppendLine("select c.IdCotizacion,u.NombreCompleto,");
-                    query.AppendLine("c.DocumentoCliente, c.RFC, c.NombreCliente,");
-                    query.AppendLine("c.TipoDocumento,c.NumeroDocumento,");
+                    query.AppendLine("c.CodigoCliente, c.RFC, c.NombreCliente,");
+                    query.AppendLine("c.Folio,");
                     query.AppendLine("c.MontoPago,c.MontoCambio,c.MontoTotal,");
                     query.AppendLine("convert(char(10),c.FechaRegistro,103)[FechaRegistro]");
                     query.AppendLine("from COTIZACION c");
                     query.AppendLine("inner join USUARIO u on u.IdUsuario = c.IdUsuario");
-                    query.AppendLine("where c.NumeroDocumento = @numero");
+                    query.AppendLine("where c.Folio = @numero");
 
                     SqlCommand cmd = new SqlCommand(query.ToString(), conexion);
                     cmd.Parameters.AddWithValue("@numero", numero);
@@ -112,11 +112,11 @@ namespace CapaDatos
                             {
                                 IdCotizacion = int.Parse(dr["IdCotizacion"].ToString()),
                                 oUsuario = new Usuario() { NombreCompleto = dr["NombreCompleto"].ToString() },
-                                DocumentoCliente = dr["DocumentoCliente"].ToString(),
+                                DocumentoCliente = dr["CodigoCliente"].ToString(),
                                 RFC = dr["RFC"].ToString(),
                                 NombreCliente = dr["NombreCliente"].ToString(),
-                                TipoDocumento = dr["TipoDocumento"].ToString(),
-                                NumeroDocumento = dr["NumeroDocumento"].ToString(),
+                                //TipoDocumento = dr["TipoDocumento"].ToString(),
+                                NumeroDocumento = dr["Folio"].ToString(),
                                 MontoPago = Convert.ToDecimal(dr["MontoPago"].ToString()),
                                 MontoCambio = Convert.ToDecimal(dr["MontoCambio"].ToString()),
                                 MontoTotal = Convert.ToDecimal(dr["MontoTotal"].ToString()),

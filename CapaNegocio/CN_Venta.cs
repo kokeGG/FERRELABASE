@@ -28,11 +28,20 @@ namespace CapaNegocio
             return objcd_venta.ObtenerCorrelativo();
         }
 
+        public int ObtenerCorrelativoFactura()
+        {
+            return objcd_venta.ObtenerCorrelativoFactura();
+        }
+
         public bool Registrar(Venta obj, DataTable DetalleVenta, out string Mensaje)
         {
             return objcd_venta.Registrar(obj, DetalleVenta, out Mensaje);
         }
 
+        public bool RegistrarFolioFactura(Venta obj, DataTable DetalleVenta, out string Mensaje)
+        {
+            return objcd_venta.RegistrarFolioFactura(obj, DetalleVenta, out Mensaje);
+        }
         public Venta ObtenerVenta(string numero)
         {
             Venta oVenta = objcd_venta.ObtenerVenta(numero);
